@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+venv/
+
+# React
+node_modules/
+
+# IDEs and editors
+.vscode/
+
+# OS generated
+.DS_Store
