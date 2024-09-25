@@ -1,25 +1,36 @@
+import sys
+import os
+
+# Add the project root directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+import logging
+import time
+import os
 from backend.app import db, create_app
 from backend.app.models.startup import Startup
-from geoalchemy2.shape import from_shape
-from shapely.geometry import Point
+from backend.app.utils.import_csv import import_startups_from_csv
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def add_sample_data():
     app = create_app()
     with app.app_context():
-        db.create_all()
+        logger.info("Starting sample data import")
+        start_time = time.time()
+
+        csv_path = os.path.join(os.path.dirname(__file__), 'startups.csv')
+        logger.info(f"Importing sample data from {csv_path}")
         
-        startups = [
-            Startup(name='TechInnovate SA', description='AI solutions for businesses', 
-                    industry='Artificial Intelligence', size='10-50', funding_stage='Series A',
-                    location=from_shape(Point(28.0473, -26.2041))),  # Johannesburg
-            Startup(name='GreenEnergy Cape', description='Renewable energy solutions', 
-                    industry='Clean Energy', size='50-100', funding_stage='Series B',
-                    location=from_shape(Point(18.4241, -33.9249))),  # Cape Town
-            # Add more sample startups here
-        ]
+        try:
+            import_startups_from_csv(csv_path)
+            logger.info("Sample data imported successfully")
+        except Exception as e:
+            logger.error(f"Error importing sample data: {str(e)}")
         
-        db.session.add_all(startups)
-        db.session.commit()
+        end_time = time.time()
+        logger.info(f"Data import completed in {end_time - start_time:.2f} seconds")
 
 if __name__ == '__main__':
     add_sample_data()
