@@ -1,0 +1,38 @@
+/* src/components/MentorCard.css */
+.mentor-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.mentor-card:hover {
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mentor-card h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.mentor-card p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.view-profile-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.view-profile-button:hover {
+    background-color: #0056b3;
+}

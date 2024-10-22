@@ -1,0 +1,26 @@
+/* src/components/StartupList.css */
+.startup-list {
+    list-style: none;
+    padding: 0;
+}
+
+.startup-list li {
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.startup-list li p {
+    margin: 5px 0;
+}
+
+.startup-list li strong {
+    font-size: 1.2em;
+}
+
+.startup-industry {
+    color: #555;
+    font-style: italic;
+}

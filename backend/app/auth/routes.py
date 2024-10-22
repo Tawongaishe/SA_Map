@@ -70,7 +70,7 @@ def login_post():
     # If no user with that email is found, return an error response
     if user is None:
         response_data["message"] = "User not found"
-        return jsonify(response_data), 401  # 401 Unauthorized
+        return jsonify(response_data), 404  # 401 Unauthorized
 
     # Check if the provided password matches the stored hashed password
     if not check_password_hash(user.password, password):
