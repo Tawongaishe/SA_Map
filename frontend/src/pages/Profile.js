@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Profile = () => {
+
+const Profile = ({ setIsAuthenticated }) => {
     const [mentor, setMentor] = useState(null);  // Store logged-in mentor's profile
     const [editing, setEditing] = useState(false);  // Track editing mode
     const [adding, setAdding] = useState(false);  // Track adding mode
@@ -13,6 +14,7 @@ const Profile = () => {
     });
     const [error, setError] = useState('');  // Store error messages
     const navigate = useNavigate();
+
 
     // Fetch logged-in user's mentor profile on mount
     useEffect(() => {
@@ -120,8 +122,11 @@ const Profile = () => {
             if (response.ok) {
                 // If logout is successful, remove user ID from local storage
                 localStorage.removeItem('user_id');
-    
-                // Redirect to the home page or another public view where login/signup is shown
+                
+                // Update the isAuthenticated state to false
+                setIsAuthenticated(false);  // Force UI update by setting isAuthenticated to false
+                
+                // Redirect to the home page
                 navigate('/');  // Redirect to the public home page
             } else {
                 console.error('Logout failed');
@@ -129,11 +134,12 @@ const Profile = () => {
         } catch (error) {
             console.error('Error during logout:', error);
         }
-    };
+    }
 
     return (
         <div>
             <h1>Profile Page</h1>
+            {error && <p>{error}</p>}
             <button onClick={handleLogout}>Logout</button>
 
             {mentor ? (

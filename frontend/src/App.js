@@ -20,24 +20,7 @@ const App = () => {
         }
     }, []);
 
-    const handleLogout = async () => {
-        try {
-            const response = await fetch('/logout', {
-                method: 'GET',
-                credentials: 'include',
-            });
 
-            if (response.ok) {
-                localStorage.removeItem('user_id');
-                setIsAuthenticated(false);  // Set authentication state to false
-                window.location.href = '/';  // Redirect to home page after logout
-            } else {
-                console.error('Logout failed');
-            }
-        } catch (error) {
-            console.error('Error during logout:', error);
-        }
-    };
 
     return (
         <Router>
@@ -53,7 +36,7 @@ const App = () => {
                     ) : (
                         <>
                             <Link to="/mentorship">Mentors</Link>
-                            <button onClick={handleLogout}>Logout</button>
+                            <Link to="/profile">Profile</Link>  
                         </>
                     )}
                 </nav>
@@ -77,7 +60,7 @@ const App = () => {
                         path="/profile"
                         element={
                             <PrivateRoute isAuthenticated={isAuthenticated}>
-                                <Profile />
+                                <Profile setIsAuthenticated={setIsAuthenticated}/>
                             </PrivateRoute>
                         }
                     />
