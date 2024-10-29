@@ -1,7 +1,6 @@
 // src/pages/MentorPage.js
 import React, { useState, useEffect } from 'react';
 import MentorCard from '../components/MentorCard';  // Import the MentorCard component
-import MentorProfile from '../components/MentorProfile';
 
 
 const MentorPage = () => {
@@ -47,8 +46,7 @@ const MentorPage = () => {
                 {mentors.map((mentor) => (
                     <MentorCard key={mentor.id} mentor={mentor} />  // Use MentorCard for each mentor
                 ))}
-            </div>
-            <MentorProfile />  
+            </div>  
         </div>
     );
 };
