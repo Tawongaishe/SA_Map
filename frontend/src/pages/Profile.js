@@ -30,7 +30,7 @@ const Profile = ({ setIsAuthenticated }) => {
                     const userData = await userResponse.json();
                     console.log("User data:", userData);  // Debugging log
                     setUser(userData);
-                    setSelectedIndustryIds(userData.industries.map(industry => industry.id));
+                    setSelectedIndustryIds(userData.industries.map(industry => typeof industry === 'string' ? industry : industry.id));
                 }
 
                 const industriesResponse = await fetch(`/users/industries`, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
@@ -93,17 +93,14 @@ const Profile = ({ setIsAuthenticated }) => {
                         <p><strong>About Me:</strong> {user.blurb || 'N/A'}</p>
                         <p><strong>Industries:</strong></p>
                         <div className="selected-industries">
-                            {selectedIndustryIds.map((id) => {
-                                const industry = industriesOptions.find((ind) => ind.id === id);
-                                return (
-                                    <span key={id} className="industry-tag">
-                                        {industry?.name || 'Unnamed'}
-                                        {editingUser && (
-                                            <button onClick={() => handleRemoveIndustry(id)}>x</button>
-                                        )}
-                                    </span>
-                                );
-                            })}
+                            {user.industries.map((industry, index) => (
+                                <span key={index} className="industry-tag">
+                                    {typeof industry === 'string' ? industry : industry.name || 'Unnamed'}
+                                    {editingUser && (
+                                        <button onClick={() => handleRemoveIndustry(industry.id || industry)}>x</button>
+                                    )}
+                                </span>
+                            ))}
                         </div>
 
                         {editingUser && (
@@ -142,7 +139,7 @@ const Profile = ({ setIsAuthenticated }) => {
                         <div className="expertise-list">
                             {mentor.expertises.map((expertise, index) => (
                                 <span key={index} className="expertise-tag">
-                                    {expertise?.name || 'Unnamed'}
+                                    {typeof expertise === 'string' ? expertise : expertise.name || 'Unnamed'}
                                 </span>
                             ))}
                         </div>
