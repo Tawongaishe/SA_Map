@@ -20,7 +20,6 @@ const Profile = ({ setIsAuthenticated }) => {
                 else if (!mentorResponse.ok) throw new Error('Failed to fetch mentor profile');
                 else {
                     const mentorData = await mentorResponse.json();
-                    console.log("Mentor data:", mentorData);  // Debugging log
                     setMentor(mentorData);
                 }
 
@@ -28,7 +27,6 @@ const Profile = ({ setIsAuthenticated }) => {
                 if (!userResponse.ok) throw new Error('Failed to fetch user data');
                 else {
                     const userData = await userResponse.json();
-                    console.log("User data:", userData);  // Debugging log
                     setUser(userData);
                     setSelectedIndustryIds(userData.industries.map(industry => typeof industry === 'string' ? industry : industry.id));
                 }
@@ -37,7 +35,6 @@ const Profile = ({ setIsAuthenticated }) => {
                 if (!industriesResponse.ok) throw new Error('Failed to fetch industries');
                 else {
                     const industriesData = await industriesResponse.json();
-                    console.log("Industries options:", industriesData);  // Debugging log
                     setIndustriesOptions(industriesData);
                 }
 
@@ -93,14 +90,17 @@ const Profile = ({ setIsAuthenticated }) => {
                         <p><strong>About Me:</strong> {user.blurb || 'N/A'}</p>
                         <p><strong>Industries:</strong></p>
                         <div className="selected-industries">
-                            {user.industries.map((industry, index) => (
-                                <span key={index} className="industry-tag">
-                                    {typeof industry === 'string' ? industry : industry.name || 'Unnamed'}
-                                    {editingUser && (
-                                        <button onClick={() => handleRemoveIndustry(industry.id || industry)}>x</button>
-                                    )}
-                                </span>
-                            ))}
+                            {user.industries.map((industry, index) => {
+                                const industryName = typeof industry === 'string' ? industry : industry.name;
+                                return (
+                                    <span key={index} className="industry-tag">
+                                        {industryName || 'Unnamed'}
+                                        {editingUser && (
+                                            <button onClick={() => handleRemoveIndustry(industry.id || industry)}>x</button>
+                                        )}
+                                    </span>
+                                );
+                            })}
                         </div>
 
                         {editingUser && (
