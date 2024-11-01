@@ -37,12 +37,14 @@ def create_app():
     from backend.app.auth.routes import auth as auth_bp
     from backend.app.mentor.routes import mentor_bp as mentor_bp
     from backend.app.startup.routes import startup_bp as startup_bp
+    from backend.app.user.routes import user_bp as user_bp
 
     #register all the blueprints in the worksapce 
     app.register_blueprint(main_bp)  
     app.register_blueprint(auth_bp)
     app.register_blueprint(mentor_bp)
     app.register_blueprint(startup_bp)
+    app.register_blueprint(user_bp)
 
 
     return app

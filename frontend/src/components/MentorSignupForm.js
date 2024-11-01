@@ -1,20 +1,61 @@
 // src/components/MentorSignupForm.js
-import React, { useState } from 'react';
+// the edit functionality of the expertise form is still poor 
+import React, { useState, useEffect } from 'react';
 
 const MentorSignupForm = ({ mentor, onSuccess }) => {
     const [formData, setFormData] = useState({
         name: mentor?.name || '',
-        expertise: mentor?.expertise || '',
         contact_info: mentor?.contact_info || ''
     });
-    const [expertiseOptions] = useState([
-        'Software Development', 'Data Science', 'Product Management', 'Design', 'Marketing'
-    ]);
-    const [customExpertise, setCustomExpertise] = useState('');
+    const [expertiseOptions, setExpertiseOptions] = useState([]);
+    const [selectedExpertiseIds, setSelectedExpertiseIds] = useState(mentor?.expertises?.map(e => e.id) || []);
 
+    // Fetch expertise options from backend
+    useEffect(() => {
+        const fetchExpertiseOptions = async () => {
+            try {
+                const response = await fetch('/expertise');
+                const data = await response.json();
+                setExpertiseOptions(data || []);
+            } catch (err) {
+                console.error("Failed to fetch expertise options:", err);
+            }
+        };
+
+        fetchExpertiseOptions();
+    }, []);
+
+    // Sync selectedExpertiseIds with mentor data when mentor prop changes
+    useEffect(() => {
+        if (mentor) {
+            setFormData({
+                name: mentor.name,
+                contact_info: mentor.contact_info,
+            });
+            setSelectedExpertiseIds(mentor.expertises ? mentor.expertises.map(e => e.id) : []);
+        }
+    }, [mentor]);
+
+    // Handle adding an expertise by ID
+    const handleAddExpertise = (id) => {
+        if (!selectedExpertiseIds.includes(id)) {
+            setSelectedExpertiseIds([...selectedExpertiseIds, id]);
+        }
+    };
+
+    // Handle removing an expertise by ID
+    const handleRemoveExpertise = (id) => {
+        setSelectedExpertiseIds(selectedExpertiseIds.filter((expId) => expId !== id));
+    };
+
+    // Handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const submitData = customExpertise ? { ...formData, expertise: customExpertise } : formData;
+
+        const submitData = {
+            ...formData,
+            expertises: selectedExpertiseIds
+        };
         const method = mentor ? 'PUT' : 'POST';
         const endpoint = mentor ? `/mentors/me` : `/mentors`;
 
@@ -29,7 +70,7 @@ const MentorSignupForm = ({ mentor, onSuccess }) => {
             if (!response.ok) throw new Error('Failed to submit mentor profile');
 
             const updatedMentor = await response.json();
-            onSuccess(updatedMentor);  // Notify parent of success
+            onSuccess(updatedMentor);
         } catch (err) {
             console.error('Error submitting mentor profile:', err);
         }
@@ -48,30 +89,30 @@ const MentorSignupForm = ({ mentor, onSuccess }) => {
             </div>
             <div>
                 <label>Expertise:</label>
-                <select
-                    value={formData.expertise}
-                    onChange={(e) => {
-                        const selectedValue = e.target.value;
-                        if (selectedValue === 'Other') setCustomExpertise('');
-                        setFormData({ ...formData, expertise: selectedValue });
-                    }}
-                >
+                <div className="expertise-selection">
                     {expertiseOptions.map((option) => (
-                        <option key={option} value={option}>
-                            {option}
-                        </option>
+                        <button
+                            type="button"
+                            key={option.id}
+                            className={`expertise-option ${selectedExpertiseIds.includes(option.id) ? 'selected' : ''}`}
+                            onClick={() => handleAddExpertise(option.id)}
+                            disabled={selectedExpertiseIds.includes(option.id)}
+                        >
+                            {option.name}
+                        </button>
                     ))}
-                    <option value="Other">Other</option>
-                </select>
-                {formData.expertise === 'Other' && (
-                    <input
-                        type="text"
-                        placeholder="Enter your expertise"
-                        value={customExpertise}
-                        onChange={(e) => setCustomExpertise(e.target.value)}
-                        required
-                    />
-                )}
+                </div>
+                <div className="selected-expertise">
+                    {selectedExpertiseIds.map((id) => {
+                        const expertise = expertiseOptions.find((opt) => opt.id === id);
+                        return (
+                            <span key={id} className="expertise-tag">
+                                {expertise?.name || 'Unnamed'}
+                                <button type="button" onClick={() => handleRemoveExpertise(id)}>x</button>
+                            </span>
+                        );
+                    })}
+                </div>
             </div>
             <div>
                 <label>Contact Info:</label>
@@ -83,6 +124,47 @@ const MentorSignupForm = ({ mentor, onSuccess }) => {
                 />
             </div>
             <button type="submit">{mentor ? 'Save Changes' : 'Sign Up'}</button>
+
+            {/* Updated CSS styling */}
+            <style jsx>{`
+                .expertise-selection {
+                    display: flex;
+                    gap: 0.5rem;
+                    margin-bottom: 0.5rem;
+                    flex-wrap: wrap;
+                }
+                .expertise-option {
+                    padding: 0.4rem 0.8rem;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+                .expertise-option.selected {
+                    background-color: #0073e6;
+                    color: white;
+                }
+                .selected-expertise-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                    gap: 0.5rem;
+                    margin-bottom: 0.5rem;
+                }
+                .expertise-tag {
+                    background-color: #e0e0e0;
+                    padding: 0.3rem 0.7rem;
+                    border-radius: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                .expertise-tag button {
+                    margin-left: 0.5rem;
+                    background: none;
+                    border: none;
+                    color: #ff0000;
+                    cursor: pointer;
+                }
+            `}</style>
         </form>
     );
 };

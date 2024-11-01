@@ -83,3 +83,8 @@ Honestly I feel like a Slack channel would be the best thibg where you can
 - Mentor List 
 - Funds List 
 - Startup Community (find cofounders, friends, competitors and support )
+
+
+# Upgrading db
+- change the models file sand then cd in backend and ` flask db migrates -m "add in migration message" `
+- Then ` flask db upgrade ` to apply the changes

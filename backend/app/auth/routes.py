@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from backend.app import db
 from backend.app.auth.utils import login_required
-from backend.app.models.startup import User
+from backend.app.models.startup import User, Industry
 
 auth = Blueprint("auth", __name__)
 
@@ -24,6 +24,17 @@ def signup_post():
     email = data["email"]
     name = data["name"]
     password = data["password"]
+    location = data["location"]
+    blurb = data["blurb"]
+   
+   #collect industries ids
+    industries = data.get('industries', [])
+
+    #fetch industry list from the database based on provided IDs
+    industry_list = Industry.query.filter(Industry.id.in_(industries)).all()
+    if not industry_list or len(industry_list) != len(industries):
+        response_data["message"] = "One or more industry IDs are invalid"
+        return jsonify(response_data), 400
 
     #Check if all fields are filled
     if not email or not name or not password:
@@ -43,6 +54,9 @@ def signup_post():
         email=email,
         name=name,
         password=generate_password_hash(password, method="pbkdf2:sha256"),
+        location=location,
+        blurb=blurb,
+        industries=industry_list
     )
 
     # Add the new user to the database

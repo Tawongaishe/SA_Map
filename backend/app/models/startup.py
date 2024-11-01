@@ -1,6 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import from_shape
 from backend.app import db, login_manager
 
 class Startup(db.Model):
@@ -16,14 +14,18 @@ class Startup(db.Model):
         return f'<Startup {self.name}>'
     
     def serialize(self):
-        startup_data = {
+        return {
             "id": self.id,
             "name": self.name,
             "industry": self.industry,
             "location": self.location,
         }
 
-        return startup_data
+# Association table for many-to-many relationship between Mentor and Expertise
+mentor_expertise = db.Table('mentor_expertise',
+    db.Column('mentor_id', db.Integer, db.ForeignKey('mentor.id'), primary_key=True),
+    db.Column('expertise_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
+)
 
 class Mentor(db.Model):
     __tablename__ = 'mentor'
@@ -32,49 +34,98 @@ class Mentor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
-    expertise = db.Column(db.String(100))
     contact_info = db.Column(db.String(100))
-
     
+    # Many-to-many relationship with Expertise
+    expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors')
+
     def __repr__(self):
         return f'<Mentor {self.name}>'
     
     def serialize(self):
-        mentor_data = {
+        return {
             "id": self.id,
             "user_id": self.user_id,
             "name": self.name,
-            "expertise": self.expertise,
+            "expertises": [expertise.name for expertise in self.expertises],  # List of expertise names
             "contact_info": self.contact_info,
         }
-
-        return mentor_data
     
+
+class Expertise(db.Model):
+    __tablename__ = 'expertise'
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('expertise_category.id'), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    
+    # Many-to-many relationship with Mentor
+    mentors = db.relationship('Mentor', secondary=mentor_expertise, back_populates='expertises')
+
+    #serialize mentor with name and id 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
+    def __repr__(self):
+        return f'<Expertise {self.name}>'
+
+class ExpertiseCategory(db.Model):
+    __tablename__ = 'expertise_category'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255), nullable=True)
+    
+    # One-to-many relationship with Expertise
+    expertise = db.relationship('Expertise', backref='category', lazy=True)
+
+    def __repr__(self):
+        return f'<ExpertiseCategory {self.name}>'
+
+# Define the association table between User and Industry
+user_industry = db.Table(
+    'user_industry',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('industry_id', db.Integer, db.ForeignKey('industry.id'), primary_key=True)
+)
+
+class Industry(db.Model):
+    __tablename__ = 'industry'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    
+    # Many-to-many relationship with User
+    users = db.relationship('User', secondary=user_industry, back_populates="industries")
+
+    def __repr__(self):
+        return f'<Industry {self.name}>'
 
 class User(db.Model):
     __tablename__ = 'user'
-    __table_args__ = {'extend_existing': True}
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    location = db.Column(db.String(100), nullable=True)
+    blurb = db.Column(db.String(255), nullable=True)
+    
+    # Many-to-many relationship with Industry
+    industries = db.relationship('Industry', secondary=user_industry, back_populates="users")
 
     def __repr__(self):
         return f'<User {self.name}>'
     
     def serialize(self):
-    # adding a visited set to avoid infinite recursion when users are connected to each other
-    
-        user_data = {
+        return {
             "id": self.id,
-            "name": self.first_name,
+            "name": self.name,
             "email": self.email,
+            "location": self.location,
+            "blurb": self.blurb,
+            "industries": [industry.name for industry in self.industries] if self.industries else []
         }
 
-        return user_data
-
-# Set up user_loader    
+# Set up user_loader for user session management
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))

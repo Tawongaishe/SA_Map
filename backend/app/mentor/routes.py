@@ -1,6 +1,6 @@
 #create routes to sign up as a mentor and show the mentor route 
 from flask import Blueprint, request, jsonify, session
-from backend.app.models.startup import Mentor, User
+from backend.app.models.startup import Mentor, User, Expertise, ExpertiseCategory
 from backend.app import db
 from backend.app.auth.utils import login_required   
 
@@ -17,34 +17,40 @@ def sign_up_mentor():
         return jsonify({'error': 'No input data provided'}), 400
     
     user_id = session.get('user_id')
-
-    required_fields = ['name', 'expertise', 'contact_info']
+    required_fields = ['name', 'expertises', 'contact_info']
     missing_fields = [field for field in required_fields if not data.get(field)]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields: {', '.join(missing_fields)}'}), 400
-
-    # Check if user exists
-    user = session['user_id']
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
+        return jsonify({'error': f'Missing required fields: {", ".join(missing_fields)}'}), 400
 
     # Check if the user already has a mentor profile
     existing_mentor = Mentor.query.filter_by(user_id=user_id).first()
     if existing_mentor:
         return jsonify({'error': 'Mentor profile already exists for this user'}), 400
 
+    # Collect expertise IDs
+    expertise_ids = data.get('expertises', [])
+    if not expertise_ids:
+        return jsonify({'error': 'Expertise is required'}), 400
+
+    # Fetch expertise list from the database based on provided IDs
+    expertise_list = Expertise.query.filter(Expertise.id.in_(expertise_ids)).all()
+    if not expertise_list or len(expertise_list) != len(expertise_ids):
+        return jsonify({'error': 'One or more expertise IDs are invalid'}), 400
+
+    # Create the mentor profile
     new_mentor = Mentor(
-        user_id= user_id,
+        user_id=user_id,
         name=data['name'],
-        expertise=data['expertise'],
-        contact_info=data['contact_info']
+        contact_info=data['contact_info'],
+        expertises=expertise_list  # Associate the valid expertise list here
     )
 
     db.session.add(new_mentor)
     db.session.commit()
 
     return jsonify(new_mentor.serialize()), 201
+
 
 
 #get my mentor info
@@ -120,20 +126,74 @@ def update_my_mentor_profile():
     if not mentor:
         return jsonify({'error': 'Mentor profile not found'}), 404
 
-    # Get the updated data from the request
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No input data provided'}), 400
 
-    # Update the mentor profile fields if provided in the request
+    # Update mentor fields
     if 'name' in data:
         mentor.name = data['name']
-    if 'expertise' in data:
-        mentor.expertise = data['expertise']
     if 'contact_info' in data:
         mentor.contact_info = data['contact_info']
 
-    # Save the updated mentor profile
+    # Update expertise
+    if 'expertises' in data:
+        expertise_ids = data['expertises']
+        expertise_list = Expertise.query.filter(Expertise.id.in_(expertise_ids)).all()
+        mentor.expertises = expertise_list
+
     db.session.commit()
 
     return jsonify(mentor.serialize()), 200
+
+#send expertise names and ids to the frontend
+@mentor_bp.route('/expertise', methods=['GET'])
+def get_all_expertises():
+    expertises = Expertise.query.all()
+    serialized_expertises = [expertise.serialize() for expertise in expertises]
+    return jsonify(serialized_expertises), 200
+
+#create a new expertise
+@mentor_bp.route('/expertise', methods=['POST'])
+@login_required
+def add_expertise():
+    data = request.get_json()
+
+    # Check if data contains 'name' and 'category_id'
+    if 'name' not in data or 'category_id' not in data:
+        return jsonify({'error': 'Missing required fields: name and category_id'}), 400
+
+    expertise_name = data['name']
+    category_id = data['category_id']
+
+    # Validate that the category exists
+    category = ExpertiseCategory.query.get(category_id)
+    if not category:
+        return jsonify({'error': 'Invalid category ID: Category not found'}), 404
+
+    # Check if expertise already exists under the same category
+    existing_expertise = Expertise.query.filter_by(name=expertise_name, category_id=category_id).first()
+    if existing_expertise:
+        return jsonify({'error': 'This expertise already exists under the specified category'}), 400
+
+    # Create new expertise
+    new_expertise = Expertise(name=expertise_name, category_id=category_id)
+    db.session.add(new_expertise)
+    db.session.commit()
+
+    return jsonify({
+        'message': 'New expertise created successfully',
+        'expertise': {
+            'id': new_expertise.id,
+            'name': new_expertise.name,
+            'category_id': new_expertise.category_id
+        }
+    }), 201
+
+#get all cateogories in the database 
+@mentor_bp.route('/expertise/categories', methods=['GET'])
+@login_required
+def get_expertise_categories():
+    categories = ExpertiseCategory.query.all()
+    serialized_categories = [{'id': category.id, 'name': category.name} for category in categories]
+    return jsonify(serialized_categories), 200
