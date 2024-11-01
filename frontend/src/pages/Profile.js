@@ -59,16 +59,23 @@ const Profile = ({ setIsAuthenticated }) => {
 
     const handleSaveUserChanges = async () => {
         try {
+            const updatedUserData = {
+                location: user.location,
+                blurb: user.blurb,
+                industries: selectedIndustryIds,
+            };
+            
             const response = await fetch('/users/me', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ industries: selectedIndustryIds }),
+                body: JSON.stringify(updatedUserData),
                 credentials: 'include'
             });
+
             if (!response.ok) throw new Error('Failed to save changes');
-            setEditingUser(false);
             const updatedUser = await response.json();
             setUser(updatedUser);
+            setEditingUser(false);
         } catch (err) {
             console.error('Error saving changes:', err);
             setError('Failed to save changes.');
@@ -86,8 +93,21 @@ const Profile = ({ setIsAuthenticated }) => {
                 <h2>User Profile</h2>
                 {user && (
                     <>
-                        <p><strong>Location:</strong> {user.location || 'N/A'}</p>
-                        <p><strong>About Me:</strong> {user.blurb || 'N/A'}</p>
+                        <p><strong>Location:</strong> {editingUser ? (
+                            <input
+                                type="text"
+                                value={user.location || ''}
+                                onChange={(e) => setUser({ ...user, location: e.target.value })}
+                            />
+                        ) : user.location || 'N/A'}</p>
+                        
+                        <p><strong>About Me:</strong> {editingUser ? (
+                            <textarea
+                                value={user.blurb || ''}
+                                onChange={(e) => setUser({ ...user, blurb: e.target.value })}
+                            />
+                        ) : user.blurb || 'N/A'}</p>
+                        
                         <p><strong>Industries:</strong></p>
                         <div className="selected-industries">
                             {user.industries.map((industry, index) => {
