@@ -163,7 +163,7 @@ const Profile = ({ setIsAuthenticated }) => {
                 <h2 onClick={() => setShowMentorProfile(!showMentorProfile)} className="toggle-header">
                     Mentor Profile <span className="toggle-icon">{showMentorProfile ? '▲' : '▼'}</span>
                 </h2>
-                {showMentorProfile && mentor && (
+                {showMentorProfile && mentor ? (
                     <div>
                         <p><strong>Name:</strong> {mentor.name}</p>
                         <p><strong>Contact Info:</strong> {mentor.contact_info}</p>
@@ -190,6 +190,13 @@ const Profile = ({ setIsAuthenticated }) => {
                                 }}
                             />
                         )}
+                    </div>
+                ) : (
+                    <div className="create-mentor-prompt">
+                        <p>You don't have a mentor profile yet. Create one to connect with others as a mentor!</p>
+                        <MentorSignupForm
+                            onSuccess={(newMentor) => setMentor(newMentor)}
+                        />
                     </div>
                 )}
             </div>
