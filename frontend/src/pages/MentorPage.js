@@ -1,6 +1,7 @@
 // src/pages/MentorPage.js
 import React, { useState, useEffect } from 'react';
 import MentorCard from '../components/MentorCard';  // Import the MentorCard component
+import './Profile.css';
 
 
 const MentorPage = () => {
@@ -39,9 +40,9 @@ const MentorPage = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h1>Mentorship Page</h1>
-            <h2>All Mentors</h2>
+        <div className = 'profile-page'>
+                <h2>Find Mentors 👩🏾‍💼</h2>
+            <p className = 'intro-text'>Here are all the mentors available to help you.</p>
             <div className="mentor-list">
                 {mentors.map((mentor) => (
                     <MentorCard key={mentor.id} mentor={mentor} />  // Use MentorCard for each mentor

@@ -1,0 +1,84 @@
+/* src/pages/Profile.css */
+
+.profile-page {
+    max-width: 800px;
+    margin: auto;
+    padding: 1rem;
+}
+
+.intro-text {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.profile-section {
+    margin-top: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fafafa;
+}
+
+.toggle-header {
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    color: #0073e6;
+}
+
+.toggle-icon {
+    font-size: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+.selected-industries, .expertise-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.pill {
+    padding: 0.5rem 1rem;
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.action-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.action-button:hover {
+    background-color: #005bb5;
+}
+
+.delete-button {
+    background-color: #ff4d4f;
+}
+
+.delete-button:hover {
+    background-color: #ff1a1a;
+}
+
+.save-button {
+    background-color: #4caf50;
+}
+
+.save-button:hover {
+    background-color: #388e3c;
+}
+   

@@ -16,7 +16,6 @@ pip freeze -r > requirements.txt
 
 ## running backend 
 cd into top level 
-python -m backend.run
 
 
 
@@ -27,6 +26,7 @@ python -m backend.run
 - Must be signed in to see any mentors 
 
 DONE
+python -m backend.run
 - find a list of all the mentors
 - click into one mentor based on mentor id
 - add yourself as a mentor 

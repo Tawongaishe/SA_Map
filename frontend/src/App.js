@@ -8,6 +8,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import PrivateRoute from './components/PrivateRoute';  // Import PrivateRoute
 import './App.css';
+import OneMentorPage from './pages/OneMentorPage';
+import LogoutButton from './components/LogoutButton';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);  // Track if user is authenticated
@@ -25,7 +27,7 @@ const App = () => {
     return (
         <Router>
             <div className="container">
-                <h1>South African Startup Map</h1>
+                <h1>South African Startup Map 🌍</h1>
                 <nav className="navigation">
                     <Link to="/">Home</Link>
                     {!isAuthenticated ? (
@@ -35,10 +37,11 @@ const App = () => {
                         </>
                     ) : (
                         <>
-                            <Link to="/mentorship">Mentors</Link>
+                            <Link to="/mentors">Mentors</Link>
                             <Link to="/profile">Profile</Link>  
                         </>
                     )}
+                    {isAuthenticated && <LogoutButton setIsAuthenticated={setIsAuthenticated} />}
                 </nav>
 
                 <Routes>
@@ -49,7 +52,7 @@ const App = () => {
 
                     {/* Protected Routes */}
                     <Route
-                        path="/mentorship"
+                        path="/mentors"
                         element={
                             <PrivateRoute isAuthenticated={isAuthenticated}>
                                 <MentorPage />
@@ -64,6 +67,11 @@ const App = () => {
                             </PrivateRoute>
                         }
                     />
+                    <Route path="/mentors/:mentorId" element={
+                        <PrivateRoute isAuthenticated={isAuthenticated}>
+                             <OneMentorPage />
+                        </PrivateRoute>
+                        } />
                 </Routes>
             </div>
         </Router>

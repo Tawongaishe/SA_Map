@@ -1,27 +1,26 @@
 // src/pages/Profile.js
 import React, { useState, useEffect } from 'react';
 import MentorSignupForm from '../components/MentorSignupForm';
-import LogoutButton from '../components/LogoutButton';
+import './Profile.css';
 
 const Profile = ({ setIsAuthenticated }) => {
     const [mentor, setMentor] = useState(null);
     const [user, setUser] = useState(null);
-    const [industriesOptions, setIndustriesOptions] = useState([]); // Store industries
+    const [industriesOptions, setIndustriesOptions] = useState([]);
     const [selectedIndustryIds, setSelectedIndustryIds] = useState([]);
     const [error, setError] = useState('');
     const [editingUser, setEditingUser] = useState(false);
     const [editingMentor, setEditingMentor] = useState(false);
+    const [showUserProfile, setShowUserProfile] = useState(true);
+    const [showMentorProfile, setShowMentorProfile] = useState(true);
 
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
                 const mentorResponse = await fetch(`/mentors/me`, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
-                if (mentorResponse.status === 404) setMentor(null); 
+                if (mentorResponse.status === 404) setMentor(null);
                 else if (!mentorResponse.ok) throw new Error('Failed to fetch mentor profile');
-                else {
-                    const mentorData = await mentorResponse.json();
-                    setMentor(mentorData);
-                }
+                else setMentor(await mentorResponse.json());
 
                 const userResponse = await fetch(`/users/me`, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
                 if (!userResponse.ok) throw new Error('Failed to fetch user data');
@@ -33,11 +32,7 @@ const Profile = ({ setIsAuthenticated }) => {
 
                 const industriesResponse = await fetch(`/users/industries`, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
                 if (!industriesResponse.ok) throw new Error('Failed to fetch industries');
-                else {
-                    const industriesData = await industriesResponse.json();
-                    setIndustriesOptions(industriesData);
-                }
-
+                else setIndustriesOptions(await industriesResponse.json());
             } catch (err) {
                 console.error('Error fetching profile data:', err);
                 setError('Failed to load profile data.');
@@ -64,7 +59,7 @@ const Profile = ({ setIsAuthenticated }) => {
                 blurb: user.blurb,
                 industries: selectedIndustryIds,
             };
-            
+
             const response = await fetch('/users/me', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -82,17 +77,35 @@ const Profile = ({ setIsAuthenticated }) => {
         }
     };
 
+    const deleteMentorProfile = async () => {
+        try {
+            const response = await fetch(`/mentors/${mentor.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            });
+            if (!response.ok) throw new Error('Failed to delete mentor profile');
+            setMentor(null);
+        } catch (err) {
+            console.error('Error deleting mentor profile:', err);
+            setError('Failed to delete mentor profile.');
+        }
+    };
+
     return (
-        <div>
-            <h1>Profile Page</h1>
+        <div className="profile-page">
+            <h2>Profile Page 👤</h2>
             {error && <p className="error">{error}</p>}
-            <LogoutButton setIsAuthenticated={setIsAuthenticated} />
+
+            <p className="intro-text">Welcome! This is your profile page where you can manage your User Profile and Mentor Profile.</p>
 
             {/* User Profile Section */}
-            <div>
-                <h2>User Profile</h2>
-                {user && (
-                    <>
+            <div className="profile-section">
+                <h2 onClick={() => setShowUserProfile(!showUserProfile)} className="toggle-header">
+                    User Profile <span className="toggle-icon">{showUserProfile ? '▲' : '▼'}</span>
+                </h2>
+                {showUserProfile && user && (
+                    <div>
                         <p><strong>Location:</strong> {editingUser ? (
                             <input
                                 type="text"
@@ -107,20 +120,17 @@ const Profile = ({ setIsAuthenticated }) => {
                                 onChange={(e) => setUser({ ...user, blurb: e.target.value })}
                             />
                         ) : user.blurb || 'N/A'}</p>
-                        
+
                         <p><strong>Industries:</strong></p>
                         <div className="selected-industries">
-                            {user.industries.map((industry, index) => {
-                                const industryName = typeof industry === 'string' ? industry : industry.name;
-                                return (
-                                    <span key={index} className="industry-tag">
-                                        {industryName || 'Unnamed'}
-                                        {editingUser && (
-                                            <button onClick={() => handleRemoveIndustry(industry.id || industry)}>x</button>
-                                        )}
-                                    </span>
-                                );
-                            })}
+                            {user.industries.map((industry, index) => (
+                                <span key={index} className="pill">
+                                    {typeof industry === 'string' ? industry : industry.name}
+                                    {editingUser && (
+                                        <button onClick={() => handleRemoveIndustry(industry.id || industry)}>x</button>
+                                    )}
+                                </span>
+                            ))}
                         </div>
 
                         {editingUser && (
@@ -130,7 +140,7 @@ const Profile = ({ setIsAuthenticated }) => {
                                         key={industry.id}
                                         onClick={() => handleAddIndustry(industry.id)}
                                         disabled={selectedIndustryIds.includes(industry.id)}
-                                        className={`industry-option ${selectedIndustryIds.includes(industry.id) ? 'selected' : ''}`}
+                                        className={`pill industry-option ${selectedIndustryIds.includes(industry.id) ? 'selected' : ''}`}
                                     >
                                         {industry.name}
                                     </button>
@@ -138,35 +148,38 @@ const Profile = ({ setIsAuthenticated }) => {
                             </div>
                         )}
 
-                        <button onClick={toggleEditUserMode}>
+                        <button className="action-button" onClick={toggleEditUserMode}>
                             {editingUser ? 'Cancel' : 'Edit User Profile'}
                         </button>
                         {editingUser && (
-                            <button onClick={handleSaveUserChanges}>Save Changes</button>
+                            <button className="action-button save-button" onClick={handleSaveUserChanges}>Save Changes</button>
                         )}
-                    </>
+                    </div>
                 )}
             </div>
 
             {/* Mentor Profile Section */}
-            <div>
-                <h2>Mentor Profile</h2>
-                {mentor ? (
-                    <>
+            <div className="profile-section">
+                <h2 onClick={() => setShowMentorProfile(!showMentorProfile)} className="toggle-header">
+                    Mentor Profile <span className="toggle-icon">{showMentorProfile ? '▲' : '▼'}</span>
+                </h2>
+                {showMentorProfile && mentor && (
+                    <div>
                         <p><strong>Name:</strong> {mentor.name}</p>
                         <p><strong>Contact Info:</strong> {mentor.contact_info}</p>
                         <p><strong>Expertise:</strong></p>
                         <div className="expertise-list">
                             {mentor.expertises.map((expertise, index) => (
-                                <span key={index} className="expertise-tag">
+                                <span key={index} className="pill">
                                     {typeof expertise === 'string' ? expertise : expertise.name || 'Unnamed'}
                                 </span>
                             ))}
                         </div>
 
-                        <button onClick={toggleEditMentorMode}>
+                        <button className="action-button" onClick={toggleEditMentorMode}>
                             {editingMentor ? 'Cancel' : 'Edit Mentor Profile'}
                         </button>
+                        <button className="action-button delete-button" onClick={deleteMentorProfile}>Delete Mentor Profile</button>
 
                         {editingMentor && (
                             <MentorSignupForm
@@ -177,58 +190,9 @@ const Profile = ({ setIsAuthenticated }) => {
                                 }}
                             />
                         )}
-                    </>
-                ) : (
-                    <MentorSignupForm
-                        onSuccess={(newMentor) => setMentor(newMentor)}
-                    />
+                    </div>
                 )}
             </div>
-
-            {/* Improved Styling for Readability */}
-            <style jsx>{`
-                .industry-selection, .expertise-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                    margin-top: 0.5rem;
-                }
-                .industry-option, .expertise-tag, .industry-tag {
-                    padding: 0.6rem 1.2rem;
-                    border: 1px solid #ccc;
-                    border-radius: 20px;
-                    font-size: 1rem;
-                    line-height: 1.5;
-                    cursor: pointer;
-                    background-color: #f5f5f5;
-                    color: #333;
-                    text-align: center;
-                }
-                .industry-option.selected, .expertise-tag {
-                    background-color: #0073e6;
-                    color: white;
-                }
-                .selected-industries {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.75rem;
-                    margin-top: 0.5rem;
-                }
-                .industry-tag {
-                    background-color: #e0e0e0;
-                    color: #333;
-                    display: inline-flex;
-                    align-items: center;
-                }
-                .industry-tag button {
-                    margin-left: 0.5rem;
-                    background: none;
-                    border: none;
-                    color: #ff0000;
-                    font-size: 1.1rem;
-                    cursor: pointer;
-                }
-            `}</style>
         </div>
     );
 };

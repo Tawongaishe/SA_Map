@@ -89,7 +89,15 @@ def get_mentor(mentor_id):
     mentor = Mentor.query.get(mentor_id)
     if not mentor:
         return jsonify({'error': 'Mentor not found'}), 404
-    return jsonify(mentor.serialize()), 200
+    user = User.query.get(mentor.user_id)
+
+    user_and_mentor_data = { 
+        'user': user.serialize(),
+        'mentor': mentor.serialize()
+    }
+    if not mentor:
+        return jsonify({'error': 'Mentor not found'}), 404
+    return jsonify(user_and_mentor_data), 200
 
 #delete mentor profile 
 @mentor_bp.route('/mentors/<int:mentor_id>', methods=['DELETE'])

@@ -1,6 +1,7 @@
 // src/components/LogoutButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './LogoutButton.css';
 
 const LogoutButton = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const LogoutButton = ({ setIsAuthenticated }) => {
         }
     };
 
-    return <button onClick={handleLogout}>Logout</button>;
+    return <button onClick={handleLogout} className="logout-button">Logout</button>;
 };
 
 export default LogoutButton;

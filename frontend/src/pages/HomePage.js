@@ -1,6 +1,7 @@
 // src/pages/HomePage.js
 import React, { useState, useEffect } from 'react';
 import StartupList from '../components/StartupList';
+import './Profile.css';
 
 const HomePage = () => {
     const [startups, setStartups] = useState([]);
@@ -23,8 +24,9 @@ const HomePage = () => {
     }, []);
 
     return (
-        <div>
-            <h2>South African Startup Map</h2>
+        <div className = 'profile-page'>
+            <h2>Browse Startups 🔍 </h2>
+            <p className = 'intro-text'>Here are some of the startups in South Africa.</p>
             {loading ? <p>Loading...</p> : <StartupList startups={startups} />}
         </div>
     );
