@@ -17,7 +17,7 @@ def sign_up_mentor():
         return jsonify({'error': 'No input data provided'}), 400
     
     user_id = session.get('user_id')
-    required_fields = ['name', 'expertises', 'contact_info']
+    required_fields = ['name', 'expertises', 'contact_info', 'needs']
     missing_fields = [field for field in required_fields if not data.get(field)]
 
     if missing_fields:
@@ -37,13 +37,24 @@ def sign_up_mentor():
     expertise_list = Expertise.query.filter(Expertise.id.in_(expertise_ids)).all()
     if not expertise_list or len(expertise_list) != len(expertise_ids):
         return jsonify({'error': 'One or more expertise IDs are invalid'}), 400
+    
+    #collect needs IDs 
+    needs_ids = data.get('needs', [])
+    if not needs_ids:
+        return jsonify({'error': 'Needs is required'}), 400
+    
+    #fetch needs list from the database based on provided IDs
+    needs_list = Expertise.query.filter(Expertise.id.in_(needs_ids)).all()
+    if not needs_list or len(needs_list) != len(needs_ids):
+        return jsonify({'error': 'One or more needs IDs are invalid'}), 400
 
     # Create the mentor profile
     new_mentor = Mentor(
         user_id=user_id,
         name=data['name'],
         contact_info=data['contact_info'],
-        expertises=expertise_list  # Associate the valid expertise list here
+        expertises=expertise_list,
+        needs=needs_list
     )
 
     db.session.add(new_mentor)

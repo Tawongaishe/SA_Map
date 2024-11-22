@@ -27,8 +27,14 @@ const Profile = ({ setIsAuthenticated }) => {
                 else {
                     const userData = await userResponse.json();
                     setUser(userData);
-                    setSelectedIndustryIds(userData.industries.map(industry => typeof industry === 'string' ? industry : industry.id));
+                    setSelectedIndustryIds(
+                        userData.industries
+                            ? userData.industries.map(industry => (typeof industry === 'string' ? industry : industry.id))
+                            : []
+                    );
                 }
+
+                
 
                 const industriesResponse = await fetch(`/users/industries`, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
                 if (!industriesResponse.ok) throw new Error('Failed to fetch industries');
@@ -175,7 +181,13 @@ const Profile = ({ setIsAuthenticated }) => {
                                 </span>
                             ))}
                         </div>
-
+                         <div className="needs-list">
+                            {mentor.needs.map((need, index) => (
+                                <span key={index} className="pill">
+                                    {typeof need === 'string' ? need : need.name || 'Unnamed'}
+                                </span>
+                            ))}
+                        </div>
                         <button className="action-button" onClick={toggleEditMentorMode}>
                             {editingMentor ? 'Cancel' : 'Edit Mentor Profile'}
                         </button>

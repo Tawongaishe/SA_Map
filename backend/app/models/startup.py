@@ -27,6 +27,11 @@ mentor_expertise = db.Table('mentor_expertise',
     db.Column('expertise_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
 )
 
+mentor_needs = db.Table('mentor_needs',
+    db.Column('mentor_id', db.Integer, db.ForeignKey('mentor.id'), primary_key=True),
+    db.Column('needs_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
+)
+
 class Mentor(db.Model):
     __tablename__ = 'mentor'
     __table_args__ = {'extend_existing': True} 
@@ -36,8 +41,11 @@ class Mentor(db.Model):
     name = db.Column(db.String(100), nullable=False)
     contact_info = db.Column(db.String(100))
     
-    # Many-to-many relationship with Expertise
-    expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors')
+    # Many-to-many relationship with Expertise (for expertises)
+    expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors_expertise')
+    
+    # Many-to-many relationship with Expertise (for needs)
+    needs = db.relationship('Expertise', secondary=mentor_needs, back_populates='mentors_needs')
 
     def __repr__(self):
         return f'<Mentor {self.name}>'
@@ -49,7 +57,9 @@ class Mentor(db.Model):
             "name": self.name,
             "expertises": [expertise.name for expertise in self.expertises],  # List of expertise names
             "contact_info": self.contact_info,
+            "needs": [need.name for need in self.needs]
         }
+
     
 
 class Expertise(db.Model):
@@ -59,8 +69,8 @@ class Expertise(db.Model):
     name = db.Column(db.String(100), nullable=False)
     
     # Many-to-many relationship with Mentor
-    mentors = db.relationship('Mentor', secondary=mentor_expertise, back_populates='expertises')
-
+    mentors_expertise = db.relationship('Mentor', secondary=mentor_expertise, back_populates='expertises')
+    mentors_needs = db.relationship('Mentor', secondary=mentor_needs, back_populates='needs')
     #serialize mentor with name and id 
     def serialize(self):
         return {

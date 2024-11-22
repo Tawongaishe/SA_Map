@@ -1,5 +1,6 @@
 // src/components/SignupForm.js
 import React, { useState, useEffect } from 'react';
+import './SignupForm.css';
 
 const SignupForm = ({ onSignup }) => {
     const [name, setName] = useState('');
@@ -7,10 +8,9 @@ const SignupForm = ({ onSignup }) => {
     const [password, setPassword] = useState('');
     const [location, setLocation] = useState('');
     const [blurb, setBlurb] = useState('');
-    const [industriesOptions, setIndustriesOptions] = useState([]); // Store available industries
-    const [selectedIndustryIds, setSelectedIndustryIds] = useState([]); // Store selected industry IDs
+    const [industriesOptions, setIndustriesOptions] = useState([]);
+    const [selectedIndustryIds, setSelectedIndustryIds] = useState([]);
 
-    // Fetch industries from backend
     useEffect(() => {
         const fetchIndustries = async () => {
             try {
@@ -25,7 +25,6 @@ const SignupForm = ({ onSignup }) => {
                 console.error('Error fetching industries:', error);
             }
         };
-
         fetchIndustries();
     }, []);
 
@@ -50,8 +49,8 @@ const SignupForm = ({ onSignup }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('user_id', data.session);  // Store the user ID
-                onSignup();  // Notify parent component that signup was successful
+                localStorage.setItem('user_id', data.session);
+                onSignup();
             } else {
                 alert('Signup failed');
             }
@@ -61,118 +60,59 @@ const SignupForm = ({ onSignup }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Sign Up</h2>
-            <div>
-                <label>Name:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Location:</label>
-                <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>About Me:</label>
-                <textarea
-                    value={blurb}
-                    onChange={(e) => setBlurb(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Industries:</label>
-                <div className="industry-selection">
-                    {industriesOptions.map((industry) => (
-                        <button
-                            type="button"
-                            key={industry.id}
-                            onClick={() => handleAddIndustry(industry.id)}
-                            disabled={selectedIndustryIds.includes(industry.id)}
-                            className={`industry-option ${selectedIndustryIds.includes(industry.id) ? 'selected' : ''}`}
-                        >
-                            {industry.name}
-                        </button>
-                    ))}
+        <div className="signup-container">
+            <form onSubmit={handleSubmit} className="signup-form">
+                <h2>Sign Up</h2>
+                <div className="form-group">
+                    <label>Name:</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                 </div>
-                <div className="selected-industries">
-                    {selectedIndustryIds.map((id) => {
-                        const industry = industriesOptions.find((ind) => ind.id === id);
-                        return (
-                            <span key={id} className="industry-tag">
-                                {industry?.name}
-                                <button type="button" onClick={() => handleRemoveIndustry(id)}>x</button>
-                            </span>
-                        );
-                    })}
+                <div className="form-group">
+                    <label>Email:</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-            </div>
-            <button type="submit">Sign Up</button>
-
-            <style jsx>{`
-                .industry-selection {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                    margin-bottom: 0.5rem;
-                }
-                .industry-option {
-                    padding: 0.4rem 0.8rem;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    background-color: #f5f5f5;
-                }
-                .industry-option.selected {
-                    background-color: #0073e6;
-                    color: white;
-                }
-                .selected-industries {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                }
-                .industry-tag {
-                    background-color: #e0e0e0;
-                    padding: 0.3rem 0.7rem;
-                    border-radius: 15px;
-                    display: flex;
-                    align-items: center;
-                }
-                .industry-tag button {
-                    margin-left: 0.5rem;
-                    background: none;
-                    border: none;
-                    color: #ff0000;
-                    cursor: pointer;
-                }
-            `}</style>
-        </form>
+                <div className="form-group">
+                    <label>Password:</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                    <label>Location:</label>
+                    <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>About Me:</label>
+                    <textarea value={blurb} onChange={(e) => setBlurb(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Industries:</label>
+                    <div className="industry-selection">
+                        {industriesOptions.map((industry) => (
+                            <button
+                                type="button"
+                                key={industry.id}
+                                onClick={() => handleAddIndustry(industry.id)}
+                                disabled={selectedIndustryIds.includes(industry.id)}
+                                className={`industry-option ${selectedIndustryIds.includes(industry.id) ? 'selected' : ''}`}
+                            >
+                                {industry.name}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="selected-industries">
+                        {selectedIndustryIds.map((id) => {
+                            const industry = industriesOptions.find((ind) => ind.id === id);
+                            return (
+                                <span key={id} className="industry-tag">
+                                    {industry?.name}
+                                    <button type="button" onClick={() => handleRemoveIndustry(id)}>x</button>
+                                </span>
+                            );
+                        })}
+                    </div>
+                </div>
+                <button type="submit" className="submit-button">Sign Up</button>
+            </form>
+        </div>
     );
 };
 

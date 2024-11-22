@@ -1,11 +1,12 @@
 // src/components/LoginForm.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate for redirection
+import { useNavigate } from 'react-router-dom';
+import './LoginForm.css'; // Import the CSS file for styling
 
 const LoginForm = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();  // Hook for navigating between pages
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,11 +21,11 @@ const LoginForm = ({ onLogin }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('user_id', data.session);  // Store the user ID
-                onLogin();  // Notify parent component that login was successful
+                localStorage.setItem('user_id', data.session);
+                onLogin();
             } else if (response.status === 404) {
                 alert('No account found with this email. Redirecting to signup...');
-                navigate('/signup');  // Redirect to signup page
+                navigate('/signup');
             } else if (response.status === 401) {
                 alert('Incorrect password');
             } else {
@@ -36,28 +37,32 @@ const LoginForm = ({ onLogin }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
-            <div>
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
-            <button type="submit">Login</button>
-        </form>
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
+                <h2>Login</h2>
+                <div className="form-group">
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="form-input"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="form-input"
+                    />
+                </div>
+                <button type="submit" className="login-button">Login</button>
+            </form>
+        </div>
     );
 };
 

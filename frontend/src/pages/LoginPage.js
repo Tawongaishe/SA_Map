@@ -8,7 +8,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
 
     const handleLogin = () => {
         setIsAuthenticated(true);  // Update authentication state in parent component
-        navigate('/mentorship');   // Redirect to mentorship page after login
+        navigate('/mentors');   // Redirect to mentorship page after login
     };
 
     return (

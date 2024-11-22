@@ -30,13 +30,13 @@ const OneMentorPage = () => {
 
     return (
         <div className="mentor-page">
-            <h1>Mentor Profile</h1>
+            <h1> Mentor Profile</h1>
             {error && <p className="error">{error}</p>}
             {mentorData && (
                 <>
                     {/* Mentor Section */}
                     <div className="mentor-section">
-                        <h2>{mentorData.mentor.name}</h2>
+                        <h2>Meet {mentorData.mentor.name}</h2>
                         <p><strong>Call Me:</strong> {mentorData.user.name}</p>
                         <p><strong>A Little About Me:</strong> {mentorData.user.blurb || 'Nothing much for now!'}</p>
                         <p><strong>My Expertise:</strong></p>
