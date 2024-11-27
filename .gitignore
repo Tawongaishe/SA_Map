@@ -10,3 +10,5 @@ node_modules/
 
 # OS generated
 .DS_Store
+
+flask_session/

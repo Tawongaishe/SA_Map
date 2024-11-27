@@ -6,6 +6,29 @@
   font-family: Arial, sans-serif;
 }
 
+
+
+
+.active-link {
+  color: #1890ff !important; /* Ant Design Primary Blue */
+  font-weight: bold;
+}
+
+.ant-menu-horizontal .ant-menu-item-selected {
+  background-color: transparent !important; /* Remove default background */
+}
+
+.ant-menu-item a {
+  color: inherit; /* Maintain text color from parent */
+  padding: 0; /* Remove padding from links */
+}
+
+.ant-menu-item-selected a {
+  color: #1890ff !important; /* Highlight text color for the selected link */
+  font-weight: bold;
+}
+
+
 h1 {
   text-align: center;
   color: #333;
