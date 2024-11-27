@@ -3,7 +3,7 @@ import { Form, Input, Select, Button, Tag, message } from 'antd';
 
 const { Option } = Select;
 
-const MentorSignupForm = ({ mentor, expertiseOptions, onSave, onSuccess }) => {
+const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
     const [formData, setFormData] = useState({
         name: mentor?.name || '',
         contact_info: mentor?.contact_info || '',
