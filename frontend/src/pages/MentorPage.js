@@ -11,7 +11,7 @@ const MentorPage = () => {
         const fetchMentors = async () => {
             try {
                 // Fetch list of all mentors
-                const mentorsResponse = await fetch(`/mentors`, {
+                const mentorsResponse = await fetch(`/api/mentors`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',

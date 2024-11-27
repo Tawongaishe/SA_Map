@@ -18,7 +18,7 @@ const Profile = ({ setIsAuthenticated }) => {
         const fetchProfileData = async () => {
             try {
                 // Fetch user data
-                const userResponse = await fetch(`/users/me`, {
+                const userResponse = await fetch(`/api/users/me`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -38,7 +38,7 @@ const Profile = ({ setIsAuthenticated }) => {
                 setSelectedIndustryIds(uniqueIndustryIds);
 
                 // Fetch industries options
-                const industriesResponse = await fetch(`/users/industries`, {
+                const industriesResponse = await fetch(`/api/users/industries`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -62,7 +62,7 @@ const Profile = ({ setIsAuthenticated }) => {
                 industries: selectedIndustryIds,
             };
 
-            const response = await fetch('/users/me', {
+            const response = await fetch('/api/users/me', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedUserData),

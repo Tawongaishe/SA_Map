@@ -10,7 +10,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchStartups = async () => {
             try {
-                const response = await fetch('/startups');
+                const response = await fetch('/api/startups');
                 const data = await response.json();
                 setStartups(data);
                 setLoading(false);

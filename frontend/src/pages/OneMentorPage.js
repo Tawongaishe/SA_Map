@@ -11,7 +11,7 @@ const OneMentorPage = () => {
     useEffect(() => {
         const fetchMentorData = async () => {
             try {
-                const response = await fetch(`/mentors/${mentorId}`, {
+                const response = await fetch(`/api/mentors/${mentorId}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include'
