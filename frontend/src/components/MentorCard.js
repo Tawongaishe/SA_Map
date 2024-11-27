@@ -1,74 +1,58 @@
-// src/components/MentorCard.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './MentorCard.css';  // Add CSS for styling
+import React from "react";
+import { Card, Tag, Button, Space, Avatar } from "antd";
+import { Link } from "react-router-dom";
+import { UserOutlined } from "@ant-design/icons";
 
 const MentorCard = ({ mentor }) => {
-    return (
-        <div className="mentor-card">
-            <h3>{mentor.name}</h3>
-            
-            <p><strong>Expertise:</strong></p>
-            <div className="expertise-list">
-                {mentor.expertises && mentor.expertises.length > 0 ? (
-                    mentor.expertises.map((exp, index) => (
-                        <span key={index} className="expertise-tag">
-                            {typeof exp === 'string' ? exp : exp.name || 'Unnamed'}
-                        </span>
-                    ))
-                ) : (
-                    <p>No expertise listed.</p>
-                )}
-            </div>
+  return (
+    <Card bordered={false} style={{ marginBottom: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Image */}
+        <Avatar
+          src={mentor.image}
+          size={32}
+          icon={!mentor.image && <UserOutlined />}
+          style={{ marginRight: "1rem" }}
+        />
 
-            <p><strong>Contact Info:</strong> {mentor.contact_info}</p>
-            
-            <Link to={`/mentors/${mentor.id}`} className="view-profile-button">
-                View Profile
-            </Link>
-
-            {/* Add CSS for styling */}
-            <style jsx>{`
-                .mentor-card {
-                    padding: 1.5rem;
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    background-color: #fff;
-                    margin-bottom: 1rem;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                }
-                .expertise-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                    margin-top: 0.5rem;
-                }
-                .expertise-tag {
-                    padding: 0.4rem 0.8rem;
-                    background-color: #0073e6;
-                    color: white;
-                    border-radius: 12px;
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    text-align: center;
-                }
-                .view-profile-button {
-                    display: inline-block;
-                    margin-top: 1rem;
-                    padding: 0.5rem 1rem;
-                    background-color: #0073e6;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 4px;
-                    text-align: center;
-                    font-weight: 600;
-                }
-                .view-profile-button:hover {
-                    background-color: #005bb5;
-                }
-            `}</style>
+        {/* Name */}
+        <div style={{ flex: 1 }}>
+          <h3 style={{ margin: 0 }}>{mentor.name}</h3>
         </div>
-    );
+
+        {/* Call-to-Action */}
+        <Link to={`/mentors/${mentor.id}`}>
+          <Button variant="outlined" color="primary" size="small">
+            profile
+          </Button>
+        </Link>
+      </div>
+
+      {/* Tags */}
+      <div style={{ marginTop: "1rem", textAlign: "left" }}>
+        {mentor.expertises && mentor.expertises.length > 0 ? (
+          mentor.expertises.map((exp, index) => (
+            // gray color for tags
+            <Tag
+            //   color="#2db7f5"
+              key={index}
+              style={{ marginBottom: "0.5rem", backgroundColor: "transparent" }}
+            >
+              {typeof exp === "string" ? exp : exp.name || "Unnamed"}
+            </Tag>
+          ))
+        ) : (
+          <p>No expertise listed.</p>
+        )}
+      </div>
+    </Card>
+  );
 };
 
 export default MentorCard;
