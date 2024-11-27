@@ -1,68 +1,70 @@
-// src/components/LoginForm.js
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginForm.css'; // Import the CSS file for styling
+import { Form, Input, Button, message } from 'antd';
 
 const LoginForm = ({ onLogin }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const loginData = { email, password };
+    const handleSubmit = async (values) => {
+        const { email, password } = values;
 
         try {
             const response = await fetch('/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginData),
+                body: JSON.stringify({ email, password }),
             });
 
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('user_id', data.session);
                 onLogin();
+                message.success('Login successful');
             } else if (response.status === 404) {
-                alert('No account found with this email. Redirecting to signup...');
+                message.warning('No account found with this email. Redirecting to signup...');
                 navigate('/signup');
             } else if (response.status === 401) {
-                alert('Incorrect password');
+                message.error('Incorrect password');
             } else {
-                alert('Login failed');
+                message.error('Login failed');
             }
         } catch (error) {
             console.error('Error logging in:', error);
+            message.error('An error occurred. Please try again.');
         }
     };
 
     return (
-        <div className="login-container">
-            <form onSubmit={handleSubmit} className="login-form">
-                <h2>Login</h2>
-                <div className="form-group">
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="form-input"
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="form-input"
-                    />
-                </div>
-                <button type="submit" className="login-button">Login</button>
-            </form>
-        </div>
+        <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+            style={{ maxWidth: '400px', margin: '0 auto' }}
+        >
+            <h2>Login to Your Account</h2>
+            <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                    { required: true, message: 'Please enter your email!' },
+                    { type: 'email', message: 'Please enter a valid email!' },
+                ]}
+            >
+                <Input placeholder="Enter your email" />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                    { required: true, message: 'Please enter your password!' },
+                ]}
+            >
+                <Input.Password placeholder="Enter your password" />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" block>
+                    Login
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 

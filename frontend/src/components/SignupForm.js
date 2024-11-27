@@ -1,20 +1,21 @@
 // src/components/SignupForm.js
 import React, { useState, useEffect } from 'react';
-import './SignupForm.css';
+import { Form, Input, Button, Select, Tag, message } from 'antd';
+
+const { TextArea } = Input;
+const { Option } = Select;
 
 const SignupForm = ({ onSignup }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [location, setLocation] = useState('');
-    const [blurb, setBlurb] = useState('');
     const [industriesOptions, setIndustriesOptions] = useState([]);
     const [selectedIndustryIds, setSelectedIndustryIds] = useState([]);
 
     useEffect(() => {
         const fetchIndustries = async () => {
             try {
-                const response = await fetch('/users/industries', { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+                const response = await fetch('/users/industries', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
                 if (response.ok) {
                     const industries = await response.json();
                     setIndustriesOptions(industries);
@@ -28,17 +29,11 @@ const SignupForm = ({ onSignup }) => {
         fetchIndustries();
     }, []);
 
-    const handleAddIndustry = (id) => {
-        if (!selectedIndustryIds.includes(id)) setSelectedIndustryIds([...selectedIndustryIds, id]);
-    };
-
-    const handleRemoveIndustry = (id) => {
-        setSelectedIndustryIds(selectedIndustryIds.filter((industryId) => industryId !== id));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const signupData = { name, email, password, location, blurb, industries: selectedIndustryIds };
+    const handleSubmit = async (values) => {
+        const signupData = {
+            ...values,
+            industries: selectedIndustryIds,
+        };
 
         try {
             const response = await fetch('/signup', {
@@ -51,68 +46,93 @@ const SignupForm = ({ onSignup }) => {
                 const data = await response.json();
                 localStorage.setItem('user_id', data.session);
                 onSignup();
+                message.success('Signup successful');
             } else {
-                alert('Signup failed');
+                message.error('Signup failed');
             }
         } catch (error) {
             console.error('Error signing up:', error);
+            message.error('An error occurred. Please try again.');
         }
     };
 
     return (
-        <div className="signup-container">
-            <form onSubmit={handleSubmit} className="signup-form">
-                <h2>Sign Up</h2>
-                <div className="form-group">
-                    <label>Name:</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Location:</label>
-                    <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <label>About Me:</label>
-                    <textarea value={blurb} onChange={(e) => setBlurb(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <label>Industries:</label>
-                    <div className="industry-selection">
-                        {industriesOptions.map((industry) => (
-                            <button
-                                type="button"
-                                key={industry.id}
-                                onClick={() => handleAddIndustry(industry.id)}
-                                disabled={selectedIndustryIds.includes(industry.id)}
-                                className={`industry-option ${selectedIndustryIds.includes(industry.id) ? 'selected' : ''}`}
+        <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+            style={{ maxWidth: '600px', margin: '0 auto' }}
+        >
+            <h2>Sign Up for an Account</h2>
+            <Form.Item
+                label="Name"
+                name="name"
+                rules={[
+                    { required: true, message: 'Please enter your name!' },
+                ]}
+            >
+                <Input placeholder="Enter your name" />
+            </Form.Item>
+            <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                    { required: true, message: 'Please enter your email!' },
+                    { type: 'email', message: 'Please enter a valid email!' },
+                ]}
+            >
+                <Input placeholder="Enter your email" />
+            </Form.Item>
+            <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                    { required: true, message: 'Please enter your password!' },
+                ]}
+            >
+                <Input.Password placeholder="Enter your password" />
+            </Form.Item>
+            <Form.Item label="Location" name="location">
+                <Input placeholder="Enter your location" />
+            </Form.Item>
+            <Form.Item label="About Me" name="blurb">
+                <TextArea placeholder="Tell us about yourself" rows={4} />
+            </Form.Item>
+            <Form.Item label="Industries">
+                <Select
+                    mode="multiple"
+                    placeholder="Select industries"
+                    onChange={(values) => setSelectedIndustryIds(values)}
+                    value={selectedIndustryIds}
+                >
+                    {industriesOptions.map((industry) => (
+                        <Option key={industry.id} value={industry.id}>
+                            {industry.name}
+                        </Option>
+                    ))}
+                </Select>
+                <div style={{ marginTop: '10px' }}>
+                    {selectedIndustryIds.map((id) => {
+                        const industry = industriesOptions.find((ind) => ind.id === id);
+                        return (
+                            <Tag
+                                key={id}
+                                closable
+                                onClose={() =>
+                                    setSelectedIndustryIds(selectedIndustryIds.filter((industryId) => industryId !== id))
+                                }
                             >
-                                {industry.name}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="selected-industries">
-                        {selectedIndustryIds.map((id) => {
-                            const industry = industriesOptions.find((ind) => ind.id === id);
-                            return (
-                                <span key={id} className="industry-tag">
-                                    {industry?.name}
-                                    <button type="button" onClick={() => handleRemoveIndustry(id)}>x</button>
-                                </span>
-                            );
-                        })}
-                    </div>
+                                {industry?.name}
+                            </Tag>
+                        );
+                    })}
                 </div>
-                <button type="submit" className="submit-button">Sign Up</button>
-            </form>
-        </div>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" block>
+                    Sign Up
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 
