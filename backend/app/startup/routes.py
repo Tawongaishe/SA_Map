@@ -30,7 +30,8 @@ def create_startup():
     missing_fields = [field for field in required_fields if not data.get(field)]
 
     if missing_fields:
-        return jsonify({'error': f'Missing required fields: {', '.join(missing_fields)}'}), 400
+        return jsonify({'error': f"Missing required fields: {', '.join(missing_fields)}"}), 400
+
 
     new_startup = Startup(
         name=data['name'],
