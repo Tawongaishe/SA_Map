@@ -40,7 +40,7 @@ class Mentor(db.Model):
     # Many-to-many relationship with Expertise (for expertises)
     expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors_expertise')
     
-    # Many-to-many relationship with Expertise (for needs)
+    
 
     def __repr__(self):
         return f'<Mentor {self.name}>'
