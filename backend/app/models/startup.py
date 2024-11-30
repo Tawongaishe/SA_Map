@@ -54,7 +54,6 @@ class Mentor(db.Model):
             "contact_info": self.contact_info,
         }
 
-    
 
 class Expertise(db.Model):
     __tablename__ = 'expertise'
