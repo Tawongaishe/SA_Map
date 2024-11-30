@@ -32,7 +32,6 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
         if (mentor) {
         console.log('Mentor:', mentor);
         console.log('Mentor Expertises:', mentor.expertises);
-        console.log('Mentor Needs:', mentor.needs);
             setFormData({
                 name: mentor.name || '',
                 contact_info: mentor.contact_info || '',
@@ -54,8 +53,8 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
             expertises: selectedExpertiseIds, // Send IDs of the expertise to the backend
         };
 
-        const method = mentor ? 'PUT' : 'POST';
-        const endpoint = mentor ? `/mentors/me` : `/mentors`;
+        // const method = mentor ? 'PUT' : 'POST';
+        // const endpoint = mentor ? `/mentors/me` : `/mentors`;
 
         try {
             // Replace this with the actual API endpoint

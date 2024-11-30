@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Tag, Button, Space, Avatar } from "antd";
+import { Card, Tag, Button, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 
