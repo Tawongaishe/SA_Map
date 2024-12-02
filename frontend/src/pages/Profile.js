@@ -27,6 +27,17 @@ const Profile = ({ setIsAuthenticated }) => {
                 const userData = await userResponse.json();
                 setUser(userData);
 
+                 // Fetch mentor data
+                const mentorResponse = await fetch(`/api/mentors/me`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                });
+                if (!mentorResponse.ok) throw new Error('Failed to fetch mentor data');
+                const mentorData = await mentorResponse.json();
+                setMentor(mentorData.mentor || null); // Access the nested `mentor` key
+
+
                 // Initialize selectedIndustryIds from backend data
                 const uniqueIndustryIds = [
                     ...new Set(

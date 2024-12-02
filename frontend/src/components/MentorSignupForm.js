@@ -58,7 +58,7 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
 
         try {
             // Replace this with the actual API endpoint
-            const response = await fetch(`/api/mentors/${mentor ? 'me' : ''}`, {
+            const response = await fetch(`/api/mentors${mentor ? '/me' : ''}`, {
                 method: mentor ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(submitData),

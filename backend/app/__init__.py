@@ -40,11 +40,11 @@ def create_app():
     from backend.app.user.routes import user_bp as user_bp
 
     #register all the blueprints in the worksapce 
-    app.register_blueprint(main_bp)  
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(mentor_bp)
-    app.register_blueprint(startup_bp)
-    app.register_blueprint(user_bp)
+    app.register_blueprint(main_bp, url_prefix='/api')  
+    app.register_blueprint(auth_bp, url_prefix='/api')
+    app.register_blueprint(mentor_bp, url_prefix='/api')
+    app.register_blueprint(startup_bp, url_prefix='/api')
+    app.register_blueprint(user_bp, url_prefix='/api')
 
 
     return app

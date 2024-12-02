@@ -7,51 +7,60 @@ from backend.app.auth.utils import login_required
 
 mentor_bp = Blueprint('mentor_bp', __name__)
 
-# Sign up to be a mentor
 @mentor_bp.route('/mentors', methods=['POST'])
 @login_required
 def sign_up_mentor():
-    data = request.get_json()
+    try:
+        # Check if JSON data is provided in the request
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No input data provided'}), 400
 
-    if not data:
-        return jsonify({'error': 'No input data provided'}), 400
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'User not authenticated or session expired'}), 401
+
+        # Validate required fields
+        required_fields = ['name', 'expertises', 'contact_info']
+        missing_fields = [field for field in required_fields if not data.get(field)]
+        if missing_fields:
+            return jsonify({'error': f'Missing required fields: {", ".join(missing_fields)}'}), 400
+
+        # Check if the user already has a mentor profile
+        existing_mentor = Mentor.query.filter_by(user_id=user_id).first()
+        if existing_mentor:
+            return jsonify({'error': 'Mentor profile already exists for this user'}), 400
+
+        # Validate expertise IDs
+        expertise_ids = data.get('expertises', [])
+        if not isinstance(expertise_ids, list) or not expertise_ids:
+            return jsonify({'error': 'Expertises must be a non-empty list of IDs'}), 400
+
+        # Fetch expertise list from the database
+        expertise_list = Expertise.query.filter(Expertise.id.in_(expertise_ids)).all()
+        if not expertise_list or len(expertise_list) != len(expertise_ids):
+            return jsonify({'error': 'One or more expertise IDs are invalid'}), 400
+
+        # Create new mentor profile
+        new_mentor = Mentor(
+            user_id=user_id,
+            name=data['name'],
+            contact_info=data['contact_info'],
+            expertises=expertise_list  # Assuming a many-to-many relationship
+        )
+
+        # Save the new mentor profile to the database
+        db.session.add(new_mentor)
+        db.session.commit()
+
+        return jsonify({'message': 'Mentor profile created successfully', 'mentor_id': new_mentor.id}), 201
+
+    except KeyError as e:
+        return jsonify({'error': f'Missing key in request data: {str(e)}'}), 400
+    except Exception as e:
+        # Catch-all for unexpected errors
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
     
-    user_id = session.get('user_id')
-    required_fields = ['name', 'expertises', 'contact_info']
-    missing_fields = [field for field in required_fields if not data.get(field)]
-
-    if missing_fields:
-        return jsonify({'error': f'Missing required fields: {", ".join(missing_fields)}'}), 400
-
-    # Check if the user already has a mentor profile
-    existing_mentor = Mentor.query.filter_by(user_id=user_id).first()
-    if existing_mentor:
-        return jsonify({'error': 'Mentor profile already exists for this user'}), 400
-
-    # Collect expertise IDs
-    expertise_ids = data.get('expertises', [])
-    if not expertise_ids:
-        return jsonify({'error': 'Expertise is required'}), 400
-
-    # Fetch expertise list from the database based on provided IDs
-    expertise_list = Expertise.query.filter(Expertise.id.in_(expertise_ids)).all()
-    if not expertise_list or len(expertise_list) != len(expertise_ids):
-        return jsonify({'error': 'One or more expertise IDs are invalid'}), 400
-    
-
-    # Create the mentor profile
-    new_mentor = Mentor(
-        user_id=user_id,
-        name=data['name'],
-        contact_info=data['contact_info'],
-        expertises=expertise_list,
-    )
-
-    db.session.add(new_mentor)
-    db.session.commit()
-
-    return jsonify(new_mentor.serialize()), 201
-
 
 
 #get my mentor info
@@ -71,9 +80,9 @@ def get_my_mentor_info():
     # Retrieve mentor profile associated with the user
     mentor = Mentor.query.filter_by(user_id=user_id).first()
     if not mentor:
-        return jsonify({'error': 'Mentor profile not found'}), 404
+        return jsonify({'mentor': None}), 200  
 
-    return jsonify(mentor.serialize()), 200
+    return jsonify({'mentor':(mentor.serialize())}), 200
 
 # Route to retrieve all mentors
 @mentor_bp.route('/mentors', methods=['GET'])

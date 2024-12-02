@@ -1,4 +1,10 @@
 # seed_locations_and_industries.py
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+
 
 from backend.app import db, create_app
 from backend.app.models import Industry, User  # Adjust imports based on your file structure
