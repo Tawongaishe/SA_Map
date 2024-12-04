@@ -1,8 +1,8 @@
-"""initial migration og models excluding needs
+"""Initial migration to AWS cluster
 
-Revision ID: de4efdc3edf8
+Revision ID: 8af417333b14
 Revises: 
-Create Date: 2024-11-30 20:06:39.646349
+Create Date: 2024-12-03 20:04:47.085635
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'de4efdc3edf8'
+revision = '8af417333b14'
 down_revision = None
 branch_labels = None
 depends_on = None

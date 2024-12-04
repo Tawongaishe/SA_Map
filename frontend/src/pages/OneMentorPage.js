@@ -1,7 +1,9 @@
-// src/pages/MentorPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './OneMentorPage.css';
+import { Card, Avatar, Tag, Typography, Divider } from 'antd';
+import { UserOutlined, EnvironmentOutlined, PhoneOutlined } from '@ant-design/icons';
+
+const { Title, Paragraph, Text } = Typography;
 
 const OneMentorPage = () => {
     const { mentorId } = useParams();
@@ -28,69 +30,84 @@ const OneMentorPage = () => {
         fetchMentorData();
     }, [mentorId]);
 
+    if (error) return <div className="text-red-500 text-center p-4">{error}</div>;
+
     return (
-        <div className="mentor-page">
-            <h1> Mentor Profile</h1>
-            {error && <p className="error">{error}</p>}
+        <div className="max-w-xl mx-auto p-4">
             {mentorData && (
                 <>
-                    {/* Mentor Section */}
-                    <div className="mentor-section">
-                        <h2>Meet {mentorData.mentor.name}</h2>
-                        <p><strong>Call Me:</strong> {mentorData.user.name}</p>
-                        <p><strong>A Little About Me:</strong> {mentorData.user.blurb || 'Nothing much for now!'}</p>
-                        <p><strong>My Expertise:</strong></p>
-                        <div className="expertise-list">
-                            {mentorData.mentor.expertises.length > 0 ? mentorData.mentor.expertises.map((expertise, index) => (
-                                <span key={index} className="expertise-tag">{expertise}</span>
-                            )) : <p>No expertise listed.</p>}
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-40 rounded-t-lg" />
+                    
+                    <Card 
+                        className="-mt-20 p-5"
+                        style={{ borderRadius: '8px' }}
+                    >
+                        <div className="flex gap-4 mb-6">
+                            <Avatar 
+                                src={mentorData.user.image} 
+                                size={120} 
+                                icon={!mentorData.user.image && <UserOutlined />}
+                                className="border-4 border-white -mt-14"
+                            />
+                            <div className="flex-1 mt-2">
+                                <Title level={3} style={{ marginTop: 0, marginBottom: '4px' }}>
+                                    {mentorData.mentor.name}
+                                </Title>
+                                <div className="flex items-center gap-2">
+                                    <EnvironmentOutlined className="text-gray-500" />
+                                    <Text className="text-gray-500">
+                                        {mentorData.user.location || 'Location not specified'}
+                                    </Text>
+                                </div>
+                            </div>
                         </div>
-                        <p><strong>My Industries:</strong></p>
-                        <div className="industry-list">
-                            { mentorData.user.industries.length > 0 ? mentorData.user.industries.map((industry, index) => (
-                                <span key={index} className="industry-tag">{industry}</span>
-                            )) : <p>No industries listed.</p>} 
+
+                        <div className="max-w-md mx-auto">
+                            <div className="space-y-4">
+                                <div>
+                                    <Title level={4}>About</Title>
+                                    <Paragraph>{mentorData.user.blurb || 'Nothing much for now!'}</Paragraph>
+                                    <Divider />
+                                </div>
+
+                                <div>
+                                    <Title level={4}>Expertise</Title>
+                                    <div className="flex flex-wrap gap-2">
+                                        {mentorData.mentor.expertises.length > 0 ? 
+                                            mentorData.mentor.expertises.map((expertise, index) => (
+                                                <Tag key={index} color="blue">{expertise}</Tag>
+                                            )) : 
+                                            <Text type="secondary">No expertise listed</Text>
+                                        }
+                                    </div>
+                                    <Divider />
+                                </div>
+
+                                <div>
+                                    <Title level={4}>Industries</Title>
+                                    <div className="flex flex-wrap gap-2">
+                                        {mentorData.user.industries.length > 0 ? 
+                                            mentorData.user.industries.map((industry, index) => (
+                                                <Tag key={index} color="cyan">{industry}</Tag>
+                                            )) : 
+                                            <Text type="secondary">No industries listed</Text>
+                                        }
+                                    </div>
+                                    <Divider />
+                                </div>
+
+                                <div>
+                                    <Title level={4}>Contact Information</Title>
+                                    <div className="flex items-center gap-2">
+                                        <PhoneOutlined className="text-gray-500" />
+                                        <Text>{mentorData.mentor.contact_info}</Text>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p><strong>Contact Info:</strong> {mentorData.mentor.contact_info}</p>
-                        <p><strong>Location:</strong> {mentorData.user.location || 'N/A'}</p>
-                    </div>
+                    </Card>
                 </>
             )}
-
-            {/* Styling for Mentor Page */}
-            <style jsx>{`
-                .mentor-page {
-                    padding: 1.5rem;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    background-color: #fff;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                }
-                .expertise-list, .industry-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                    margin-top: 0.5rem;
-                }
-                .expertise-tag, .industry-tag {
-                    padding: 0.4rem 0.8rem;
-                    background-color: #0073e6;
-                    color: white;
-                    border-radius: 12px;
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    text-align: center;
-                }
-                .mentor-section, .user-section {
-                    margin-top: 1.5rem;
-                }
-                .error {
-                    color: red;
-                    font-weight: bold;
-                    margin-bottom: 1rem;
-                }
-            `}</style>
         </div>
     );
 };
