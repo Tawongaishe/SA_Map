@@ -8,6 +8,8 @@ const HomePage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        console.log('Starting fetch...'); // Add this log
+        
         const fetchStartups = async () => {
             try {
                 const response = await fetch('/api/startups', {
