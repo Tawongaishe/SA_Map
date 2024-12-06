@@ -2,20 +2,57 @@ import React, { useState, useEffect } from 'react';
 import StartupList from '../components/StartupList';
 import './Profile.css';
 
-import React, { useState, useEffect } from 'react';
 
 const HomePage = () => {
-    console.log('Component rendering');
+    const [startups, setStartups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log('useEffect running');
-        alert('useEffect is running');
+        const fetchStartups = async () => {
+            try {
+                console.log('Fetching startups...');
+                // Using relative path instead of full URL
+                const response = await fetch('/api/startups', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add cache control to prevent caching
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Data received:', data);
+                setStartups(data);
+            } catch (error) {
+                console.error('Error fetching startups:', error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStartups();
     }, []);
 
     return (
-        <div>
+        <div className="profile-page">
             <h2>Browse Startups 🔍</h2>
-            <p>Test Page</p>
+            <p className="intro-text">Here are some of the startups in South Africa.</p>
+            {error && <p style={{color: 'red'}}>Error: {error}</p>}
+            {loading ? (
+                <p>Loading...</p>
+            ) : startups.length > 0 ? (
+                <StartupList startups={startups} />
+            ) : (
+                <p>No startups found</p>
+            )}
         </div>
     );
 };
