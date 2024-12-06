@@ -1,4 +1,3 @@
-// src/pages/HomePage.js
 import React, { useState, useEffect } from 'react';
 import StartupList from '../components/StartupList';
 import './Profile.css';
@@ -6,16 +5,32 @@ import './Profile.css';
 const HomePage = () => {
     const [startups, setStartups] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchStartups = async () => {
             try {
-                const response = await fetch('/api/startups');
+                const response = await fetch('/api/startups', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                // Log the raw response for debugging
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                console.log('Received data:', data); // Log the received data
                 setStartups(data);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching startups:', error);
+                console.error('Detailed error:', error);
+                setError(error.message);
                 setLoading(false);
             }
         };
@@ -23,11 +38,24 @@ const HomePage = () => {
         fetchStartups();
     }, []);
 
+    if (error) {
+        return <div className="profile-page">
+            <h2>Browse Startups 🔍</h2>
+            <p className="error-message">Error loading startups: {error}</p>
+        </div>;
+    }
+
     return (
-        <div className = 'profile-page'>
-            <h2>Browse Startups 🔍 </h2>
-            <p className = 'intro-text'>Here are some of the startups in South Africa.</p>
-            {loading ? <p>Loading...</p> : <StartupList startups={startups} />}
+        <div className="profile-page">
+            <h2>Browse Startups 🔍</h2>
+            <p className="intro-text">Here are some of the startups in South Africa.</p>
+            {loading ? (
+                <p>Loading...</p>
+            ) : startups.length > 0 ? (
+                <StartupList startups={startups} />
+            ) : (
+                <p>No startups found.</p>
+            )}
         </div>
     );
 };
