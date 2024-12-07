@@ -12,7 +12,7 @@ const SignupForm = ({ onSignup }) => {
     useEffect(() => {
         const fetchIndustries = async () => {
             try {
-                const response = await fetch('/users/industries', {
+                const response = await fetch('/api/users/industries', {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -36,7 +36,7 @@ const SignupForm = ({ onSignup }) => {
         };
 
         try {
-            const response = await fetch('/signup', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(signupData),

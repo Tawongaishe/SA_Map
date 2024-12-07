@@ -7,7 +7,7 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   const handleSignup = () => {
-    navigate("/mentorship"); // Redirect to mentorship page after signup
+    navigate("/login"); // Redirect to mentorship page after signup
   };
 
   return <SignupForm onSignup={handleSignup} />;
