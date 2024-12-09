@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import StartupList from '../components/StartupList';
+import StartupCommunities from '../components/StartupCommunities';
+import StartupFinalists from '../components/StartupFinalists';
+import StartupPrograms from '../components/StartupPrograms';
 import './Profile.css';
+import { Layout, Spin, Typography } from 'antd';
 
+const { Content } = Layout;
+const { Title, Text } = Typography;
 
 const HomePage = () => {
     const [startups, setStartups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [activeSection, setActiveSection] = useState('finalists');
+
+    const scrollToSection = (sectionId) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+        setActiveSection(sectionId);
+    };
 
     useEffect(() => {
         const fetchStartups = async () => {
             try {
-                console.log('Fetching startups...');
-                // Using relative path instead of full URL
                 const response = await fetch('/api/startups', {
                     headers: {
                         'Content-Type': 'application/json',
-                        // Add cache control to prevent caching
                         'Cache-Control': 'no-cache'
                     }
                 });
-                
-                console.log('Response status:', response.status);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const data = await response.json();
-                console.log('Data received:', data);
                 setStartups(data);
             } catch (error) {
                 console.error('Error fetching startups:', error);
@@ -42,80 +51,79 @@ const HomePage = () => {
     }, []);
 
     return (
-        <div className="profile-page">
-            <h2>Browse Startups 🔍</h2>
-            <p className="intro-text">Here are some of the startups in South Africa.</p>
-            {error && <p style={{color: 'red'}}>Error: {error}</p>}
-            {loading ? (
-                <p>Loading...</p>
-            ) : startups.length > 0 ? (
-                <StartupList startups={startups} />
-            ) : (
-                <p>No startups found</p>
-            )}
-        </div>
+        <Layout className="profile-page" style={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
+            <div style={{ 
+                position: 'sticky', 
+                top: 0, 
+                zIndex: 1, 
+                width: '100%',
+                backgroundColor: '#f0f2f5',
+                padding: '12px 0'
+            }}>
+                <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'center',
+                    gap: '32px',
+                    fontSize: '16px',
+                    maxWidth: 1200,
+                    margin: '0 auto'
+                }}>
+                    {[
+                        { key: 'finalists', label: 'Award Finalists' },
+                        { key: 'communities', label: 'Communities' },
+                        { key: 'programs', label: 'Programs' },
+                        { key: 'browse', label: 'Browse All' }
+                    ].map((item) => (
+                        <a
+                            key={item.key}
+                            onClick={() => scrollToSection(item.key)}
+                            style={{
+                                cursor: 'pointer',
+                                color: activeSection === item.key ? '#1890ff' : '#595959',
+                                borderBottom: activeSection === item.key ? '2px solid #1890ff' : '2px solid transparent',
+                                paddingBottom: '4px',
+                                transition: 'all 0.3s'
+                            }}
+                        >
+                            {item.label}
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
+                <Title level={1}>South African Startup Ecosystem 🇿🇦</Title>
+                
+                <div id="finalists">
+                    <StartupFinalists />
+                </div>
+
+                <div id="communities">
+                    <StartupCommunities />
+                </div>
+
+                <div id="programs">
+                    <StartupPrograms />
+                </div>
+
+                <div id="browse" style={{ marginTop: 24 }}>
+                    <Title level={2}>
+                        <span role="img" aria-label="search">🔍</span> Browse All Startups
+                    </Title>
+                    {error && <Text type="danger">Error: {error}</Text>}
+                    {loading ? (
+                        <div style={{ textAlign: 'center', padding: '24px' }}>
+                            <Spin size="large" />
+                        </div>
+                    ) : startups.length > 0 ? (
+                        <StartupList startups={startups} />
+                    ) : (
+                        <Text>No startups found</Text>
+                    )}
+                </div>
+            </Content>
+        </Layout>
     );
 };
 
 export default HomePage;
-// const HomePage = () => {
-//     const [startups, setStartups] = useState([]);
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
-
-//     useEffect(() => {
-//         console.log('Starting fetch...'); // Add this log
-
-//         const fetchStartups = async () => {
-//             try {
-//                 const response = await fetch('/api/startups', {
-//                     method: 'GET',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                 });
-
-//                 // Log the raw response for debugging
-//                 console.log('Response status:', response.status);
-                
-//                 if (!response.ok) {
-//                     throw new Error(`HTTP error! status: ${response.status}`);
-//                 }
-                
-//                 const data = await response.json();
-//                 console.log('Received data:', data); // Log the received data
-//                 setStartups(data);
-//                 setLoading(false);
-//             } catch (error) {
-//                 console.error('Detailed error:', error);
-//                 setError(error.message);
-//                 setLoading(false);
-//             }
-//         };
-
-//         fetchStartups();
-//     }, []);
-
-//     if (error) {
-//         return <div className="profile-page">
-//             <h2>Browse Startups 🔍</h2>
-//             <p className="error-message">Error loading startups: {error}</p>
-//         </div>;
-//     }
-
-//     return (
-//         <div className="profile-page">
-//             <h2>Browse Startups 🔍</h2>
-//             <p className="intro-text">Here are some of the startups in South Africa.</p>
-//             {loading ? (
-//                 <p>Loading...</p>
-//             ) : startups.length > 0 ? (
-//                 <StartupList startups={startups} />
-//             ) : (
-//                 <p>No startups found.</p>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default HomePage;
