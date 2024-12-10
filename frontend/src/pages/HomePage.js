@@ -92,7 +92,7 @@ const HomePage = () => {
             </div>
 
             <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
-                <Title level={1}>South African Startup Ecosystem 🇿🇦</Title>
+                {/* <Title level={1}>South African Startup Ecosystem 🇿🇦</Title> */}
                 
                 <div id="finalists">
                     <StartupFinalists />

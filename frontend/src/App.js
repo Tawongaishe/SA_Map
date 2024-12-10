@@ -45,7 +45,7 @@ const App = () => {
           }}
         >
           <Title level={3} style={{ color: "white", margin: 0 }}>
-            South African Startup Map 🌍
+          South African Startup Ecosystem 🇿🇦
           </Title>
           <Menu
             theme="dark"
@@ -150,7 +150,7 @@ const App = () => {
           </Routes>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          South African Startup Map ©2024 Created with ❤️
+        South African Startup Ecosystem 🇿🇦 ©2024 Created with ❤️
         </Footer>
       </Layout>
     </Router>
