@@ -6,14 +6,11 @@ from backend.app.auth.utils import login_required
 
 user_bp = Blueprint('user', __name__)
 
-# Edit my user profile
 @user_bp.route('/users/me', methods=['PUT', 'PATCH'])
 @login_required
 def edit_my_user_profile():
-    #check that the user requestu=ing this is the same as the one being edited
-
     data = request.get_json()
-
+    
     if not data:
         return jsonify({'error': 'No input data provided'}), 400
     
@@ -22,9 +19,9 @@ def edit_my_user_profile():
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
-    #check if they are trying to change their name
     if 'email' in data:
         return jsonify({'error': 'You cannot change your email'}), 400
+    
     if 'name' in data:
         user.name = data['name']
     if 'location' in data:
@@ -32,14 +29,21 @@ def edit_my_user_profile():
     if 'blurb' in data:
         user.blurb = data['blurb']
     
-    #collect industries ids
     if 'industries' in data:
-        industries_ids = data['industries']
-        industries_list = Industry.query.filter(Industry.id.in_(industries_ids)).all()
-        user.industries = industries_list
-
+        try:
+            # Handle both string and integer IDs
+            industries_ids = [str(id_).strip() for id_ in data['industries']]
+            industries_list = Industry.query.filter(Industry.name.in_(industries_ids)).all()
+            
+            if not industries_list:
+                return jsonify({'error': 'No valid industries found'}), 400
+                
+            user.industries = industries_list
+        except Exception as e:
+            print(f"Error processing industries: {e}")  # For debugging
+            return jsonify({'error': 'Error processing industries'}), 400
+    
     db.session.commit()
-
     return jsonify(user.serialize()), 200
 
 

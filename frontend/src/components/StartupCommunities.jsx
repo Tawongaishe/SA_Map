@@ -57,7 +57,7 @@ const StartupCommunities = () => {
           <Title 
             level={2}
             style={{ 
-              color: '#595959',
+              color: '#6b21a8',
               marginBottom: 16,
               fontSize: '28px',
               fontWeight: 600

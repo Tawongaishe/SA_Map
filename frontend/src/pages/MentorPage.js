@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col } from 'antd'; // Import Ant Design grid components
+import { Row, Col, Empty, Typography } from 'antd';
 import MentorCard from '../components/MentorCard';
+import MentorHero from '../components/MentorHero';
+
+const { Title } = Typography;
 
 const MentorPage = () => {
-    const [mentors, setMentors] = useState([]); // Store list of all mentors
-    const [loading, setLoading] = useState(true); // Track loading state
-    const [error, setError] = useState(''); // Store error messages
+    const [mentors, setMentors] = useState([]);
+    const [filteredMentors, setFilteredMentors] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedExpertise, setSelectedExpertise] = useState('all');
 
     useEffect(() => {
         const fetchMentors = async () => {
             try {
-                // Fetch list of all mentors
-                const mentorsResponse = await fetch(`/api/mentors`, {
+                const response = await fetch(`/api/mentors`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
                 });
 
-                if (!mentorsResponse.ok) {
+                if (!response.ok) {
                     throw new Error('Failed to fetch mentors');
                 }
 
-                const mentorsData = await mentorsResponse.json();
+                const mentorsData = await response.json();
                 setMentors(mentorsData);
-                setLoading(false); // Turn off loading state
+                setFilteredMentors(mentorsData);
+                setLoading(false);
             } catch (err) {
                 console.error('Error fetching mentors:', err);
                 setError('Failed to load mentors data.');
@@ -34,26 +40,72 @@ const MentorPage = () => {
         fetchMentors();
     }, []);
 
-    if (loading) return <p>Loading mentors...</p>;
-    if (error) return <p>{error}</p>;
+    const getAllExpertises = () => {
+        const expertiseSet = new Set();
+        mentors.forEach(mentor => {
+            mentor.expertises?.forEach(exp => {
+                expertiseSet.add(typeof exp === 'string' ? exp : exp.name);
+            });
+        });
+        return Array.from(expertiseSet);
+    };
+
+    
+const filterMentors = (search, expertise) => {
+    let filtered = mentors;
+
+    // Filter by search term
+    if (search) {
+        filtered = filtered.filter(mentor =>
+            mentor.name.toLowerCase().includes(search.toLowerCase()) ||
+            mentor.location?.toLowerCase().includes(search.toLowerCase())
+        );
+    }
+
+    // Filter by expertise
+    if (expertise && expertise !== 'all') {
+        filtered = filtered.filter(mentor =>
+            mentor.expertises?.some(exp => {
+                const expertiseName = typeof exp === 'string' ? exp : exp.name;
+                return expertiseName === expertise;
+            })
+        );
+    }
+
+    setFilteredMentors(filtered);
+};
+
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+        filterMentors(value, selectedExpertise);
+    };
+
+    const handleExpertiseFilter = (value) => {
+        setSelectedExpertise(value);
+        filterMentors(searchTerm, value);
+    };
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h2>Find Mentors 👩🏾‍💼</h2>
-            <p style={{ marginBottom: '20px' }}>Here are all the mentors available to help you.</p>
+        <div style={{ background: '#EDE9FE', margin: '0px' }}>
+            <MentorHero 
+                onSearch={handleSearch}
+                onExpertiseChange={handleExpertiseFilter}
+                expertiseOptions={getAllExpertises()}
+            />
 
-            <Row gutter={[16, 16]} justify="center"> {/* Grid layout */}
-                {mentors.map((mentor) => (
-                    <Col
-                        key={mentor.id}
-                        xs={24} // Full width on small screens
-                        sm={12} // Two cards per row on medium screens
-                        lg={8} // Three cards per row on large screens
-                    >
-                        <MentorCard mentor={mentor} /> {/* Render MentorCard */}
-                    </Col>
-                ))}
-            </Row>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 2rem' }}>
+                <Row gutter={[24, 24]}>
+                    {filteredMentors.map((mentor) => (
+                        <Col xs={24} sm={12} lg={8} key={mentor.id}>
+                            <MentorCard mentor={mentor} />
+                        </Col>
+                    ))}
+                </Row>
+
+                {filteredMentors.length === 0 && (
+                    <Empty description="No mentors found matching your criteria" />
+                )}
+            </div>
         </div>
     );
 };

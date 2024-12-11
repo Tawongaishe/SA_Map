@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Typography, Button, Input, Select, Tag } from 'antd';
-import { 
-    UserOutlined, 
-    StarOutlined 
-} from '@ant-design/icons';
+import { Layout, Avatar, Typography, Button, Input, Select, Tag, Card, Radio } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import MentorSignupForm from '../components/MentorSignupForm';
-import { profileStyles as styles } from './ProfileStyles';
 
-const { Sider, Content } = Layout;
 const { Title } = Typography;
 const { TextArea } = Input;
 
@@ -116,16 +111,26 @@ const Profile = ({ setIsAuthenticated }) => {
     };
 
     const ProfileSection = ({ label, children }) => (
-        <div style={styles.section}>
-            <div style={styles.label}>{label}</div>
-            <div style={styles.value}>{children}</div>
+        <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>{label}</div>
+            <div>{children}</div>
         </div>
     );
 
     return (
-        <Layout>
-            <Sider width={280} theme="light" style={styles.sider}>
-                <div style={styles.siderContent}>
+        <Layout style={{ minHeight: '100vh', justifyContent: 'center', alignItems: 'center', background: '#EDE9FE' }}>
+            <Card style={{ width: '100%', maxWidth: '800px', padding: '24px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', background: '#FAF5FF' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <Radio.Group
+                        value={activeSection}
+                        onChange={(e) => setActiveSection(e.target.value)}
+                        style={{ marginBottom: '16px' }}
+                    >
+                        <Radio.Button value="user" style={{ borderColor: '#A78BFA', color: '#6B21A8' }}>User Profile</Radio.Button>
+                        <Radio.Button value="mentor" style={{ borderColor: '#A78BFA', color: '#6B21A8' }}>Mentor Profile</Radio.Button>
+                    </Radio.Group>
+                </div>
+                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                     <input 
                         type="file" 
                         id="profilePicUpload" 
@@ -134,188 +139,142 @@ const Profile = ({ setIsAuthenticated }) => {
                         onChange={handleProfilePictureUpload}
                     />
                     <label htmlFor="profilePicUpload">
-                        <Avatar 
+                    <Avatar 
                             size={140} 
                             src={profilePicture} 
                             icon={<UserOutlined />} 
-                            style={styles.avatar}
+                            style={{ cursor: 'pointer', marginBottom: '16px', border: '2px solid #F97316' }}
                         />
                     </label>
-                    {user && (
-                        <Title level={3} style={{ margin: '8px 0 0 0' }}>
-                            {user.name}
-                        </Title>
-                    )}
                 </div>
-                <Menu 
-                    mode="inline" 
-                    selectedKeys={[activeSection]}
-                    onSelect={({ key }) => setActiveSection(key)}
-                    style={{ fontSize: '16px', border: 'none' }}
-                >
-                    <Menu.Item key="user" icon={<UserOutlined />}>
-                        User Profile
-                    </Menu.Item>
-                    <Menu.Item key="mentor" icon={<StarOutlined />}>
-                        Mentor Profile
-                    </Menu.Item>
-                </Menu>
-            </Sider>
-
-            <Layout>
-                <Content style={styles.content}>
-                    {activeSection === 'user' && (
-                        <div>
-                            <Title level={2} style={{ marginBottom: '32px' }}>
-                                User Profile
-                            </Title>
-                            {user && (
-                                <>
-                                    <ProfileSection label="Location">
-                                        {!editingUser ? user?.location || '' : null}
-                                    </ProfileSection>
-
-                                    <ProfileSection label="About Me">
-                                        {!editingUser ? user?.blurb || '' : null}
-                                    </ProfileSection>
-
-                                    <ProfileSection label="Industries">
-                                        <div>
+                {activeSection === 'user' && (
+                    <div>
+                        <Title level={3} style={{ marginBottom: '24px', color: '#6B21A8' }}>User Profile</Title>
+                        {user && (
+                            <>
+                                <ProfileSection label="Location">
+                                    {editingUser ? (
+                                        <Input
+                                            size="large"
+                                            value={user?.location || ''}
+                                            onChange={(e) => setUser(prevUser => ({
+                                                ...prevUser,
+                                                location: e.target.value
+                                            }))}
+                                        />
+                                    ) : (
+                                        user?.location || ''
+                                    )}
+                                </ProfileSection>
+                                <ProfileSection label="About Me">
+                                    {editingUser ? (
+                                        <TextArea
+                                            size="large"
+                                            value={user?.blurb || ''}
+                                            onChange={(e) => setUser(prevUser => ({
+                                                ...prevUser,
+                                                blurb: e.target.value
+                                            }))}
+                                            style={{ minHeight: '120px' }}
+                                        />
+                                    ) : (
+                                        user?.blurb || ''
+                                    )}
+                                </ProfileSection>
+                                <ProfileSection label="Industries">
+                                    {editingUser ? (
+                                        <Select
+                                            mode="multiple"
+                                            size="large"
+                                            placeholder="Select industries"
+                                            style={{ width: '100%' }}
+                                            value={selectedIndustryIds}
+                                            onChange={(values) => setSelectedIndustryIds(values)}
+                                        >
+                                            {industriesOptions.map((industry) => (
+                                                <Select.Option key={industry.id} value={industry.id}>
+                                                    {industry.name}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    ) : (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                             {user.industries?.map((industry, index) => (
                                                 <Tag
                                                     key={index}
-                                                    style={{ padding: '4px 12px', margin: '4px' }}
+                                                    style={{ padding: '4px 12px', background: '#DDD6FE', color: '#6B21A8' }}
                                                 >
                                                     {typeof industry === 'string' ? industry : industry.name}
                                                 </Tag>
                                             ))}
                                         </div>
-                                    </ProfileSection>
-
-                                    <div style={{ marginTop: '32px' }}>
-                                        {!editingUser ? (
-                                            <Button 
-                                                onClick={() => setEditingUser(true)}
-                                                style={styles.editButton}
-                                            >
-                                                Edit User Profile
-                                            </Button>
-                                        ) : (
-                                            <div style={{ border: '1px solid #f0f0f0', padding: '24px', borderRadius: '8px' }}>
-                                                <Title level={4} style={{ marginBottom: '24px' }}>Edit Profile</Title>
-                                                
-                                                <div style={{ marginBottom: '16px' }}>
-                                                    <div style={{ marginBottom: '8px' }}>Location</div>
-                                                    <Input
-                                                        size="large"
-                                                        value={user?.location || ''}
-                                                        onChange={(e) => setUser(prevUser => ({
-                                                            ...prevUser,
-                                                            location: e.target.value
-                                                        }))}
-                                                    />
-                                                </div>
-
-                                                <div style={{ marginBottom: '16px' }}>
-                                                    <div style={{ marginBottom: '8px' }}>About Me</div>
-                                                    <TextArea
-                                                        size="large"
-                                                        value={user?.blurb || ''}
-                                                        onChange={(e) => setUser(prevUser => ({
-                                                            ...prevUser,
-                                                            blurb: e.target.value
-                                                        }))}
-                                                        style={{ minHeight: '120px' }}
-                                                    />
-                                                </div>
-
-                                                <div style={{ marginBottom: '24px' }}>
-                                                    <div style={{ marginBottom: '8px' }}>Industries</div>
-                                                    <Select
-                                                        mode="multiple"
-                                                        size="large"
-                                                        placeholder="Select industries"
-                                                        style={{ width: '100%' }}
-                                                        value={selectedIndustryIds}
-                                                        onChange={(values) => setSelectedIndustryIds(values)}
-                                                    >
-                                                        {industriesOptions.map((industry) => (
-                                                            <Select.Option key={industry.id} value={industry.id}>
-                                                                {industry.name}
-                                                            </Select.Option>
-                                                        ))}
-                                                    </Select>
-                                                </div>
-
-                                                <div style={{ display: 'flex', gap: '8px' }}>
-                                                    <Button onClick={() => setEditingUser(false)}>
-                                                        Cancel
-                                                    </Button>
-                                                    <Button type="primary" onClick={handleSaveUserChanges}>
-                                                        Save Changes
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    )}
-
-                    {activeSection === 'mentor' && (
-                        <div>
-                            <Title level={2} style={{ marginBottom: '32px' }}>
-                                Mentor Profile
-                            </Title>
-                            {mentor ? (
-                                <>
-                                    <ProfileSection label="Name">
-                                        {mentor.name}
-                                    </ProfileSection>
-                                    
-                                    <ProfileSection label="Contact Info">
-                                        {mentor.contact_info}
-                                    </ProfileSection>
-
-                                    <ProfileSection label="Expertise">
-                                        <div>
-                                            {mentor.expertises?.map((expertise, index) => (
-                                                <Tag key={index} style={{ padding: '4px 12px', margin: '4px' }}>
-                                                    {typeof expertise === 'string' ? expertise : expertise.name}
-                                                </Tag>
-                                            ))}
-                                        </div>
-                                    </ProfileSection>
-
-                                    <div style={{ marginTop: '32px' }}>
-                                        <Button 
-                                            onClick={() => setEditingUser(true)}
-                                            style={styles.editButton}
-                                        >
-                                            Edit Mentor Profile
-                                        </Button>
-                                    </div>
-
-                                    {editingUser && (
-                                        <div style={{ marginTop: '24px' }}>
-                                            <MentorSignupForm
-                                                mentor={mentor}
-                                                onSuccess={(updatedMentor) => {
-                                                    setMentor(updatedMentor);
-                                                    setEditingUser(false);
-                                                }}
-                                            />
-                                        </div>
                                     )}
-                                </>
-                            ) : (
-                                <MentorSignupForm onSuccess={(newMentor) => setMentor(newMentor)} />
-                            )}
-                        </div>
-                    )}
-                </Content>
-            </Layout>
+                                </ProfileSection>
+                                <div style={{ marginTop: '32px', display: 'flex', gap: '8px' }}>
+                                    {editingUser ? (
+                                        <>
+                                            <Button onClick={() => setEditingUser(false)}>
+                                                Cancel
+                                            </Button>
+                                            <Button type="primary" onClick={handleSaveUserChanges}>
+                                                Save Changes
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button type="primary" onClick={() => setEditingUser(true)}>
+                                            Edit User Profile
+                                        </Button>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
+                {activeSection === 'mentor' && (
+                    <div>
+                        <Title level={3} style={{ marginBottom: '24px', color: '#6B21A8' }}>Mentor Profile</Title>
+                        <p>Sign up to offer your expertise to people in the Startup network who may be looking.</p>
+                        {mentor ? (
+                            <>
+                                <ProfileSection label="Name">
+                                    {mentor.name}
+                                </ProfileSection>
+                                <ProfileSection label="Contact Info">
+                                    {mentor.contact_info}
+                                </ProfileSection>
+                                <ProfileSection label="Expertise">
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {mentor.expertises?.map((expertise, index) => (
+                                            <Tag
+                                                key={index}
+                                                style={{ padding: '4px 12px', background: '#DDD6FE', color: '#6B21A8' }}
+                                            >
+                                                {typeof expertise === 'string' ? expertise : expertise.name}
+                                            </Tag>
+                                        ))}
+                                    </div>
+                                </ProfileSection>
+                                <div style={{ marginTop: '32px', display: 'flex', gap: '8px' }}>
+                                    <Button type ="primary" onClick={() => setEditingUser(true)}>
+                                        Edit Mentor Profile
+                                    </Button>
+                                </div>
+                                {editingUser && (
+                                    <MentorSignupForm
+                                        mentor={mentor}
+                                        onSuccess={(updatedMentor) => {
+                                            setMentor(updatedMentor);
+                                            setEditingUser(false);
+                                        }}
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <MentorSignupForm onSuccess={(newMentor) => setMentor(newMentor)} />
+                        )}
+                    </div>
+                )}
+            </Card>
         </Layout>
     );
 };

@@ -30,7 +30,8 @@ const StartupPrograms = () => {
 
   return (
     <div style={{ marginBottom: 24 }}>
-      <Title level={2}>
+      <Title level={2}
+        style={{ color: '#6B21A8' }} >
         <span role="img" aria-label="school">🎓</span> Startup Programs
       </Title>
       <Row gutter={[16, 16]}>

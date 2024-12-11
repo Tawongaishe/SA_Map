@@ -1,12 +1,10 @@
-// src/App.js
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  NavLink,
 } from "react-router-dom";
-import { Layout, Menu, Typography } from "antd";
+import { Layout } from "antd";
 import HomePage from "./pages/HomePage";
 import MentorPage from "./pages/MentorPage";
 import Profile from "./pages/Profile";
@@ -14,16 +12,14 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PrivateRoute from "./components/PrivateRoute";
 import OneMentorPage from "./pages/OneMentorPage";
-import LogoutButton from "./components/LogoutButton";
+import Navigation from "./components/Navigation"; // Import the new Navigation component
 import "./App.css";
 
-const { Header, Content, Footer } = Layout;
-const { Title } = Typography;
+const { Content, Footer } = Layout;
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if user is logged in on page load
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
     if (userId) {
@@ -33,96 +29,16 @@ const App = () => {
 
   return (
     <Router>
-      <Layout>
-        <Header
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "column",
-            height: "auto",
-            paddingTop: "20px",
-          }}
-        >
-          <Title level={3} style={{ color: "white", margin: 0 }}>
-          South African Startup Ecosystem 🇿🇦
-          </Title>
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            style={{ flexGrow: 1, justifyContent: "center", width: "100%", height: "100%" }}
-          >
-            <Menu.Item key="/">
-              <NavLink
-                to="/"
-                className={({ isActive }) => (isActive ? "active-link" : "")}
-              >
-                Home
-              </NavLink>
-            </Menu.Item>
-            {!isAuthenticated ? (
-              <>
-                <Menu.Item key="/login">
-                  <NavLink
-                    to="/login"
-                    className={({ isActive }) =>
-                      isActive ? "active-link" : ""
-                    }
-                  >
-                    Login
-                  </NavLink>
-                </Menu.Item>
-                <Menu.Item key="/signup">
-                  <NavLink
-                    to="/signup"
-                    className={({ isActive }) =>
-                      isActive ? "active-link" : ""
-                    }
-                  >
-                    Sign Up
-                  </NavLink>
-                </Menu.Item>
-              </>
-            ) : (
-              <>
-                <Menu.Item key="/mentors">
-                  <NavLink
-                    to="/mentors"
-                    className={({ isActive }) =>
-                      isActive ? "active-link" : ""
-                    }
-                  >
-                    Mentors
-                  </NavLink>
-                </Menu.Item>
-                <Menu.Item key="/profile">
-                  <NavLink
-                    to="/profile"
-                    className={({ isActive }) =>
-                      isActive ? "active-link" : ""
-                    }
-                  >
-                    Profile
-                  </NavLink>
-                </Menu.Item>
-              </>
-            )}
-          </Menu>
-          {isAuthenticated && (
-            <LogoutButton setIsAuthenticated={setIsAuthenticated} />
-          )}
-        </Header>
-        <Content style={{ padding: "20px" }}>
+      <Layout style={{ minHeight: "100vh", background: "#EDE9FE" }}>
+        <Navigation isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        <Content style={{ padding: "0", background: "#EDE9FE" }}>
           <Routes>
-            {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route
               path="/login"
               element={<LoginPage setIsAuthenticated={setIsAuthenticated} />}
             />
             <Route path="/signup" element={<SignupPage />} />
-
-            {/* Protected Routes */}
             <Route
               path="/mentors"
               element={
@@ -149,8 +65,17 @@ const App = () => {
             />
           </Routes>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-        South African Startup Ecosystem 🇿🇦 ©2024 Created with ❤️
+        <Footer
+          style={{
+            textAlign: "center",
+            padding: "24px",
+            background: "#FFFFFF",
+            color: "#4B5563",
+            fontSize: "0.875rem",
+            borderTop: "1px solid #E5E7EB",
+          }}
+        >
+          South African Startup Space 🇿🇦 ©2024 Created with ❤️
         </Footer>
       </Layout>
     </Router>
