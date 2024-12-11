@@ -1,4 +1,4 @@
-/* src/App.css */
+/* Base container styles remain same */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -6,94 +6,80 @@
   font-family: Arial, sans-serif;
 }
 
-
-
-
+/* Navigation styles */
 .active-link {
-  color: #1890ff !important; /* Ant Design Primary Blue */
+  color: #F97316 !important;
   font-weight: bold;
-}
-
-.ant-menu-horizontal .ant-menu-item-selected {
-  background-color: transparent !important; /* Remove default background */
 }
 
 .ant-menu-item a {
-  color: inherit; /* Maintain text color from parent */
-  padding: 0; /* Remove padding from links */
+  color: #4B5563;
+  padding: 0;
+  transition: color 0.2s ease;
 }
 
 .ant-menu-item-selected a {
-  color: #1890ff !important; /* Highlight text color for the selected link */
+  color: #F97316 !important;
   font-weight: bold;
 }
 
-
-h1 {
-  text-align: center;
-  color: #333;
+/* Update all links */
+a {
+  color: #F97316;
+  transition: color 0.2s ease;
 }
 
-.startup-list {
-  list-style: none;
-  padding: 0;
+a:hover {
+  color: #EA580C;
 }
 
-.startup-list li {
-  background-color: #f9f9f9;
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+/* Override Ant Design primary color */
+.ant-btn-primary {
+  background: #F97316 !important;
+  border-color: #F97316 !important;
 }
 
-.startup-list li p {
-  margin: 5px 0;
+.ant-btn-primary:hover {
+  background: #EA580C !important;
+  border-color: #EA580C !important;
 }
 
-.startup-list li strong {
-  font-size: 1.2em;
+/* Override Ant Design link color */
+.ant-typography a {
+  color: #F97316;
 }
 
-.startup-industry {
-  color: #555;
-  font-style: italic;
+.ant-typography a:hover {
+  color: #EA580C;
 }
 
-/* src/App.css */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+/* Override other Ant Design blue elements */
+.ant-pagination-item-active {
+  border-color: #F97316 !important;
 }
 
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
+.ant-pagination-item-active a {
+  color: #F97316 !important;
 }
 
-/* Add this to Profile.css */
-
-.navigation {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #ddd;  /* Adds a line at the bottom */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #F97316 !important;
+  border-color: #F97316 !important;
 }
 
+.ant-radio-checked .ant-radio-inner {
+  border-color: #F97316 !important;
+}
+
+.ant-radio-checked .ant-radio-inner::after {
+  background-color: #F97316 !important;
+}
+
+/* Profile navigation */
 .navigation a {
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-  color: #0073e6;
-  transition: color 0.2s;
+  color: #F97316;
 }
 
 .navigation a:hover {
-  color: #005bb5;
+  color: #EA580C;
 }
-
-

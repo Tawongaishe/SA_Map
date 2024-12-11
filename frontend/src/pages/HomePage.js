@@ -3,7 +3,7 @@ import StartupList from '../components/StartupList';
 import StartupCommunities from '../components/StartupCommunities';
 import StartupFinalists from '../components/StartupFinalists';
 import StartupPrograms from '../components/StartupPrograms';
-import './Profile.css';
+import HomeHero from '../components/HomeHero';
 import { Layout, Spin, Typography } from 'antd';
 
 const { Content } = Layout;
@@ -51,14 +51,18 @@ const HomePage = () => {
     }, []);
 
     return (
-        <Layout className="profile-page" style={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
+        <Layout style={{ backgroundColor: '#EDE9FE', margin: '0' }}>
+            {/* Hero Section */}
+            <HomeHero />
+
+            {/* Navigation Bar */}
             <div style={{ 
                 position: 'sticky', 
                 top: 0, 
                 zIndex: 1, 
                 width: '100%',
-                backgroundColor: '#f0f2f5',
-                padding: '12px 0'
+                backgroundColor: '#EDE9FE',
+                padding: '12px 0',
             }}>
                 <div style={{ 
                     display: 'flex', 
@@ -79,10 +83,11 @@ const HomePage = () => {
                             onClick={() => scrollToSection(item.key)}
                             style={{
                                 cursor: 'pointer',
-                                color: activeSection === item.key ? '#1890ff' : '#595959',
-                                borderBottom: activeSection === item.key ? '2px solid #1890ff' : '2px solid transparent',
+                                color: activeSection === item.key ? '#F97316' : '#4B5563',
+                                borderBottom: activeSection === item.key ? '2px solid #F97316' : '2px solid transparent',
                                 paddingBottom: '4px',
-                                transition: 'all 0.3s'
+                                transition: 'all 0.3s',
+                                fontWeight: activeSection === item.key ? '600' : '400'
                             }}
                         >
                             {item.label}
@@ -91,9 +96,13 @@ const HomePage = () => {
                 </div>
             </div>
 
-            <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
-                {/* <Title level={1}>South African Startup Ecosystem 🇿🇦</Title> */}
-                
+            {/* Main Content */}
+            <Content style={{ 
+                padding: '24px', 
+                maxWidth: 1200, 
+                margin: '0 auto',
+                backgroundColor: 'transparent'
+            }}>
                 <div id="finalists">
                     <StartupFinalists />
                 </div>
@@ -107,13 +116,13 @@ const HomePage = () => {
                 </div>
 
                 <div id="browse" style={{ marginTop: 24 }}>
-                    <Title level={2}>
+                    <Title level={2} style={{ color: '#F97316' }}>
                         <span role="img" aria-label="search">🔍</span> Browse All Startups
                     </Title>
                     {error && <Text type="danger">Error: {error}</Text>}
                     {loading ? (
                         <div style={{ textAlign: 'center', padding: '24px' }}>
-                            <Spin size="large" />
+                            <Spin style={{ color: '#F97316' }} size="large" />
                         </div>
                     ) : startups.length > 0 ? (
                         <StartupList startups={startups} />

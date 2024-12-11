@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, Avatar, Tag, Typography, Divider } from 'antd';
-import { UserOutlined, EnvironmentOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Card, Avatar, Tag, Typography, Divider, Button } from 'antd';
+import { UserOutlined, EnvironmentOutlined, PhoneOutlined, LinkedinOutlined, CalendarOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -22,7 +22,6 @@ const OneMentorPage = () => {
                 const data = await response.json();
                 setMentorData(data);
             } catch (err) {
-                console.error('Error loading mentor data:', err);
                 setError('Could not load profile data.');
             }
         };
@@ -33,80 +32,137 @@ const OneMentorPage = () => {
     if (error) return <div className="text-red-500 text-center p-4">{error}</div>;
 
     return (
-        <div className="max-w-xl mx-auto p-4">
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
             {mentorData && (
-                <>
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-40 rounded-t-lg" />
-                    
-                    <Card 
-                        className="-mt-20 p-5"
-                        style={{ borderRadius: '8px' }}
-                    >
-                        <div className="flex gap-4 mb-6">
-                            <Avatar 
-                                src={mentorData.user.image} 
-                                size={120} 
-                                icon={!mentorData.user.image && <UserOutlined />}
-                                className="border-4 border-white -mt-14"
-                            />
-                            <div className="flex-1 mt-2">
-                                <Title level={3} style={{ marginTop: 0, marginBottom: '4px' }}>
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                    {/* Left Column - Profile Info */}
+                    <div style={{ flex: '0 0 300px' }}>
+                        <Card 
+                            bordered={false}
+                            style={{ 
+                                borderRadius: '16px',
+                                background: '#FFFFFF',
+                                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+                            }}
+                        >
+                            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                                <Avatar 
+                                    src={mentorData.user.image} 
+                                    size={120} 
+                                    icon={!mentorData.user.image && <UserOutlined />}
+                                    style={{
+                                        border: '4px solid #EDE9FE',
+                                        marginBottom: '1rem'
+                                    }}
+                                />
+                                <Title level={3} style={{ margin: '0.5rem 0' }}>
                                     {mentorData.mentor.name}
                                 </Title>
-                                <div className="flex items-center gap-2">
-                                    <EnvironmentOutlined className="text-gray-500" />
-                                    <Text className="text-gray-500">
-                                        {mentorData.user.location || 'Location not specified'}
-                                    </Text>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    color: '#4B5563'
+                                }}>
+                                    <EnvironmentOutlined style={{ marginRight: '0.5rem' }} />
+                                    <Text>{mentorData.user.location || 'Location not specified'}</Text>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="max-w-md mx-auto">
-                            <div className="space-y-4">
-                                <div>
-                                    <Title level={4}>About</Title>
-                                    <Paragraph>{mentorData.user.blurb || 'Nothing much for now!'}</Paragraph>
-                                    <Divider />
-                                </div>
+                            <Button 
+                                icon={<LinkedinOutlined />}
+                                size="large"
+                                block
+                                style={{
+                                    border: '1px solid #4C1D95',
+                                    color: '#4C1D95'
+                                }}
+                            >
+                                Connect on LinkedIn
+                            </Button>
+                        </Card>
+                    </div>
 
-                                <div>
-                                    <Title level={4}>Expertise</Title>
-                                    <div className="flex flex-wrap gap-2">
-                                        {mentorData.mentor.expertises.length > 0 ? 
-                                            mentorData.mentor.expertises.map((expertise, index) => (
-                                                <Tag key={index} color="blue">{expertise}</Tag>
-                                            )) : 
-                                            <Text type="secondary">No expertise listed</Text>
-                                        }
-                                    </div>
-                                    <Divider />
-                                </div>
+                    {/* Right Column - Detailed Info */}
+                    <div style={{ flex: '1 1 600px' }}>
+                        <Card 
+                            bordered={false}
+                            style={{ 
+                                borderRadius: '16px',
+                                background: '#FFFFFF',
+                                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+                            }}
+                        >
+                            <div style={{ marginBottom: '2rem' }}>
+                                <Title level={4} style={{ color: '#4C1D95' }}>About</Title>
+                                <Paragraph style={{ fontSize: '1.1rem', color: '#1F2937' }}>
+                                    {mentorData.user.blurb || 'No bio provided yet.'}
+                                </Paragraph>
+                            </div>
 
-                                <div>
-                                    <Title level={4}>Industries</Title>
-                                    <div className="flex flex-wrap gap-2">
-                                        {mentorData.user.industries.length > 0 ? 
-                                            mentorData.user.industries.map((industry, index) => (
-                                                <Tag key={index} color="cyan">{industry}</Tag>
-                                            )) : 
-                                            <Text type="secondary">No industries listed</Text>
-                                        }
-                                    </div>
-                                    <Divider />
-                                </div>
+                            <Divider style={{ margin: '1.5rem 0' }} />
 
-                                <div>
-                                    <Title level={4}>Contact Information</Title>
-                                    <div className="flex items-center gap-2">
-                                        <PhoneOutlined className="text-gray-500" />
-                                        <Text>{mentorData.mentor.contact_info}</Text>
-                                    </div>
+                            <div style={{ marginBottom: '2rem' }}>
+                                <Title level={4} style={{ color: '#4C1D95' }}>Expertise</Title>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {mentorData.mentor.expertises.map((expertise, index) => (
+                                        <Tag
+                                            key={index}
+                                            style={{
+                                                background: '#EDE9FE',
+                                                color: '#5B21B6',
+                                                border: 'none',
+                                                borderRadius: '16px',
+                                                padding: '6px 16px',
+                                                fontSize: '0.9rem'
+                                            }}
+                                        >
+                                            {expertise}
+                                        </Tag>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
-                    </Card>
-                </>
+
+                            <Divider style={{ margin: '1.5rem 0' }} />
+
+                            <div style={{ marginBottom: '2rem' }}>
+                                <Title level={4} style={{ color: '#4C1D95' }}>Industries</Title>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {mentorData.user.industries.map((industry, index) => (
+                                        <Tag
+                                            key={index}
+                                            style={{
+                                                background: '#F3F4F6',
+                                                color: '#4B5563',
+                                                border: 'none',
+                                                borderRadius: '16px',
+                                                padding: '6px 16px',
+                                                fontSize: '0.9rem'
+                                            }}
+                                        >
+                                            {industry}
+                                        </Tag>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Divider style={{ margin: '1.5rem 0' }} />
+
+                            <div>
+                                <Title level={4} style={{ color: '#4C1D95' }}>Contact Information</Title>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center',
+                                    color: '#4B5563',
+                                    fontSize: '1.1rem'
+                                }}>
+                                    <PhoneOutlined style={{ marginRight: '0.75rem' }} />
+                                    <Text>{mentorData.mentor.contact_info}</Text>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
             )}
         </div>
     );
