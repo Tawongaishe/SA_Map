@@ -62,12 +62,12 @@ const HomePage = () => {
                 zIndex: 1, 
                 width: '100%',
                 backgroundColor: '#EDE9FE',
-                padding: '12px 0',
+                padding: '12px ',
             }}>
                 <div style={{ 
                     display: 'flex', 
                     justifyContent: 'center',
-                    gap: '32px',
+                    gap: '26px',
                     fontSize: '16px',
                     maxWidth: 1200,
                     margin: '0 auto'
