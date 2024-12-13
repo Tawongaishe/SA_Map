@@ -27,7 +27,6 @@ mentor_expertise = db.Table('mentor_expertise',
     db.Column('expertise_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
 )
 
-
 class Mentor(db.Model):
     __tablename__ = 'mentor'
     __table_args__ = {'extend_existing': True} 
@@ -53,7 +52,6 @@ class Mentor(db.Model):
             "expertises": [expertise.name for expertise in self.expertises],  # List of expertise names
             "contact_info": self.contact_info,
         }
-
 
 class Expertise(db.Model):
     __tablename__ = 'expertise'

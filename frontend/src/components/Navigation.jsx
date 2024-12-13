@@ -83,8 +83,8 @@ const Navigation = ({ isAuthenticated, setIsAuthenticated }) => {
               src={logo}
               alt="Logo"
               style={{
-                height: "50px",
-                width: "50px",
+                height: "60px",
+                width: "60px",
                 borderRadius: "50%",
                 border: "2px solid #6B21A8",
                 padding: "4px",

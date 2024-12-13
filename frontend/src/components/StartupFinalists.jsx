@@ -149,7 +149,7 @@ const StartupFinalists = () => {
                 hoverable
                 size="small"
                 style={{ height: '100%' }}
-                bodyStyle={{ 
+                body={{ 
                   padding: '16px',
                   display: 'flex',
                   flexDirection: 'column',
