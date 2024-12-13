@@ -75,7 +75,7 @@ const App = () => {
             borderTop: "1px solid #E5E7EB",
           }}
         >
-          South African Startup Space 🇿🇦 ©2024 Created with ❤️
+          South African Startup Space 🇿🇦 ©2024 Created by Tawongaishe Nhawu❤️
         </Footer>
       </Layout>
     </Router>

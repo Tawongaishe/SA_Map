@@ -117,7 +117,7 @@ const HomePage = () => {
 
                 <div id="browse" style={{ marginTop: 24 }}>
                     <Title level={2} style={{ color: '#F97316' }}>
-                        <span role="img" aria-label="search">🔍</span> Browse All Startups
+                        <span role="img" aria-label="search"></span> Browse All Startups
                     </Title>
                     {error && <Text type="danger">Error: {error}</Text>}
                     {loading ? (
