@@ -130,7 +130,7 @@ const StartupFinalists = () => {
             marginBottom: 16,
             fontSize: '28px',
             fontWeight: 600}}>
-            <span role="img" aria-label="trophy">🏆</span> 27 South African Startups Shine in 2024 Awards 
+            <span role="img" aria-label="trophy"></span> 27 South African Startups Shine in 2024 Awards 
           </Title>
           <Text>
             Check out these outstanding South African startups that made it to{' '}
