@@ -109,7 +109,7 @@ flask db upgrade
 API Documentation
 
 ## Contributing
-Interested in contributing? Check out our [issues page](link-to-issues) or submit a pull request.
+Interested in contributing? Check out our [issues page](https://github.com/Tawongaishe/SA_Map/issues) or submit a pull request.
 
 ## Contact
 For questions or feedback about the platform, please reach out to [your-email@example.com]
