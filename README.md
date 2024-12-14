@@ -36,11 +36,77 @@ South African Startup Space addresses a fundamental challenge in South Africa's 
 - 20+ Communities
 - 100+ Resources
 
-## Technology Stack
-- Frontend: React, Ant Design
-- Backend: Flask/Python
-- Database: PostgreSQL
-- Hosting: Vercel (Frontend), Render (Backend), AWS RDS (Database)
+Technical Details
+Architecture
+Copy/frontend                 # React application
+  /src
+    /components          # Reusable UI components
+    /pages              # Route components
+    /services           # API communication
+    /context            # State management
+    
+/backend                 # Flask application
+  /blueprints           # Route handlers
+  /models               # Database models
+  /services             # Business logic
+Tech Stack
+
+Frontend:
+
+React.js
+Ant Design UI Framework
+Context API for state management
+
+
+Backend:
+
+Flask
+SQLAlchemy ORM
+JWT Authentication
+
+
+Database:
+
+PostgreSQL
+AWS RDS hosting
+
+
+Deployment:
+
+Frontend: Vercel
+Backend: Render
+Database: AWS RDS
+
+
+
+Local Development
+
+Frontend Setup:
+
+bashCopycd frontend
+npm install
+npm start
+
+Backend Setup:
+
+bashCopy# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run server
+python -m backend.run
+
+Database Setup:
+
+bashCopy# Access PostgreSQL
+psql sa_startup_map
+
+# Run migrations
+flask db upgrade
+API Documentation
 
 ## Contributing
 Interested in contributing? Check out our [issues page](link-to-issues) or submit a pull request.
