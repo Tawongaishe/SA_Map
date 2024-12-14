@@ -1,90 +1,52 @@
-## Running virtual environment 
-python3 -m venv venv
-source venv/bin/activate venv
-## install dependencies into venv
-pip install -r requirements.txt
+# South African Startup Space
 
-## Viewing the postgres database
-psql sa_startup_map
-\dt
-SELECT * FROM startup;
-# for the geospatial data
-SELECT id, name, ST_AsText(location) FROM startup;
+A platform bridging the gap in the South African startup ecosystem by connecting entrepreneurs with resources, mentors, and communities in one centralized hub.
 
-## add a new requirements 
-pip freeze -r > requirements.txt
+[Live Demo](https://sa-map-tau.vercel.app/) | [Video Demo](link-to-your-demo-video)
 
-## running backend 
-cd into top level 
+> Note: The backend is hosted on Render which has a cold start, so initial loading may take 1-2 minutes.
 
+## About
 
+South African Startup Space addresses a fundamental challenge in South Africa's startup ecosystem: the fragmentation of resources and connections. Rather than creating another competing platform, it serves as a bridge, connecting various elements of the ecosystem in a structured and meaningful way.
 
----
+## Key Features
 
+### 🤝 Dual-Benefit Mentorship
+- Innovative peer-to-peer mentorship system
+- Both parties can give and receive expertise
+- Easy mentor discovery and connection
+- Profile-based expertise matching
 
-**MENTORS**
-- Must be signed in to see any mentors 
+### 🚀 Startup Database
+- Comprehensive listing of SA startups
+- Industry and location-based search
+- Detailed company profiles
+- Regular updates with new companies
 
-DONE
-python -m backend.run
-- find a list of all the mentors
-- click into one mentor based on mentor id
-- add yourself as a mentor 
+### 📚 Resource Hub
+- Curated startup communities
+- Educational programs
+- Incubators and accelerators
+- Award programs and opportunities
 
-TO-DO
-- remove yourself as a mentor
-- filter mentors based on expertise, location 
+## Platform Stats
+- 500+ Startups Listed
+- 50+ Active Mentors
+- 20+ Communities
+- 100+ Resources
 
-NEXT STEPS
-- edit your mentor profile 
-- add a picture to your mentor profile 
+## Technology Stack
+- Frontend: React, Ant Design
+- Backend: Flask/Python
+- Database: PostgreSQL
+- Hosting: Vercel (Frontend), Render (Backend), AWS RDS (Database)
 
-**STARTUPS**
-- All members can see a list of all the startups 
-DONE
-- find a list of all the startups 
-- get a specific startup by its ID
-- add a new startup information
-TO-DO
-- delete a startup addition 
-- filter startups based on industry and locationb 
-- edit startup addition 
-NEXT STEPS
-- think about how we will review a startup if we need to 
+## Contributing
+Interested in contributing? Check out our [issues page](link-to-issues) or submit a pull request.
 
-**CO-FOUNDERS**
-This one is goung to require more detailed information to implement properly because 
-you  need to be able tp access tje necessary information about the persoon you are looking for
-okay it can be like an ad you are runningj= so lets do a little user painpoint analysis 
+## Contact
+For questions or feedback about the platform, please reach out to [your-email@example.com]
 
-as someone with a new idea about a startup i need to choose a acofounder 
-- what are the difficulties wiith findind s cofounder well 
-- someone passionate 
-- **someone with the right expertise**
-- **someone you can workwith **
-- someone accessible 
-
-Honestly I feel like a Slack channel would be the best thibg where you can 
-1. introduce yourself in the chat with what you do and post something about it 
-2. You can get feedback on the initial idea you have from other people
-3. You can get craft help on funding pitches
-4. You can post about funds and opportunities you find  
-5. You can find cofounders by doing the introduction thing 
-6. you can chat in industry specific channels
-7. You are required to fill out a bunch of information correctly before you can post
-
-8. It quickly identifies abuse and flags the reviewers and people are removed 
-9. it send notifications or explanations of how certain channels work 
-10. it keeps people engaged with weekly challenges or something they can use 
-11. Should it be exclusive? Not right nowm not yet it should one of the nly all-inclusive spaces for founders and techies in South Africa 
-
-
-- Startup List 
-- Mentor List 
-- Funds List 
-- Startup Community (find cofounders, friends, competitors and support )
-
-
-# Upgrading db
-- change the models file sand then cd in backend and ` flask db migrates -m "add in migration message" `
-- Then ` flask db upgrade ` to apply the changes
+## License
+[Your chosen license]
