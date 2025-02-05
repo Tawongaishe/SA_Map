@@ -27,6 +27,12 @@ mentor_expertise = db.Table('mentor_expertise',
     db.Column('expertise_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
 )
 
+# Association table for mentors and their needed expertise
+mentor_needs = db.Table('mentor_needs',
+    db.Column('mentor_id', db.Integer, db.ForeignKey('mentor.id'), primary_key=True),
+    db.Column('expertise_id', db.Integer, db.ForeignKey('expertise.id'), primary_key=True)
+)
+
 class Mentor(db.Model):
     __tablename__ = 'mentor'
     __table_args__ = {'extend_existing': True} 
@@ -35,9 +41,14 @@ class Mentor(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
     contact_info = db.Column(db.String(100))
+    linkedin = db.Column(db.String(100))
     
     # Many-to-many relationship with Expertise (for expertises)
     expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors_expertise')
+
+    # Many-to-many relationship with Expertise (for expertises they need)
+    needed_expertises = db.relationship('Expertise', secondary=mentor_needs, backref='mentors_needing')
+
     
     
 
@@ -51,6 +62,8 @@ class Mentor(db.Model):
             "name": self.name,
             "expertises": [expertise.name for expertise in self.expertises],  # List of expertise names
             "contact_info": self.contact_info,
+            "linkedin": self.linkedin if self.linkedin else "",
+            "mentor_needs": [expertise.name for expertise in self.needed_expertises],  # List of expertise names
         }
 
 class Expertise(db.Model):
@@ -124,6 +137,7 @@ class User(db.Model):
             "blurb": self.blurb,
             "industries": [industry.name for industry in self.industries] if self.industries else []
         }
+
 
 # Set up user_loader for user session management
 @login_manager.user_loader

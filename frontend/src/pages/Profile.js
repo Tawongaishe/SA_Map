@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Avatar, Typography, Button, Input, Select, Tag, Card, Radio } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import MentorSignupForm from '../components/MentorSignupForm';
+import Link from 'antd/es/typography/Link';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -242,6 +243,9 @@ const Profile = ({ setIsAuthenticated }) => {
                                 <ProfileSection label="Contact Info">
                                     {mentor.contact_info}
                                 </ProfileSection>
+                                <ProfileSection label="Linkedin">
+                                    <Link href={mentor.linkedin} target="_blank"> Linkedin profile </Link>
+                                </ProfileSection>
                                 <ProfileSection label="Expertise">
                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                         {mentor.expertises?.map((expertise, index) => (
@@ -250,6 +254,18 @@ const Profile = ({ setIsAuthenticated }) => {
                                                 style={{ padding: '4px 12px', background: '#DDD6FE', color: '#6B21A8' }}
                                             >
                                                 {typeof expertise === 'string' ? expertise : expertise.name}
+                                            </Tag>
+                                        ))}
+                                    </div>
+                                </ProfileSection>
+                                <ProfileSection label="Mentor Needs">
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {mentor.mentor_needs?.map((mentorNeed, index) => (
+                                            <Tag
+                                                key={index}
+                                                style={{ padding: '4px 12px', background: '#DDD6FE', color: '#6B21A8' }}
+                                            >
+                                                {typeof mentorNeed === 'string' ? mentorNeed : mentorNeed.name}
                                             </Tag>
                                         ))}
                                     </div>

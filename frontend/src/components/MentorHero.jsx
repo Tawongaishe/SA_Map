@@ -1,10 +1,9 @@
 import React from 'react';
-import { Row, Col, Input, Select, Typography, Button } from 'antd';
+import { Row, Col, Input, Select, Typography, Space } from 'antd';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 
-// Static expertise data
 const EXPERTISE_CATEGORIES = {
     "Funding": ["Pre-Seed", "Seed", "Series A", "Series B", "Series C", "IPO", "Grants", "Crowdfunding"],
     "Marketing": ["Digital Marketing", "Social Media Strategy", "Content Marketing", "Influencer Marketing", "Paid Advertising", "Market Research"],
@@ -31,8 +30,8 @@ const MentorHero = ({ onSearch, onExpertiseChange }) => {
                     lineHeight: '1.2',
                     marginBottom: '1rem'
                 }}>
-                    Find Your Perfect<br />
-                    Mentor
+                    Learn & Share<br />
+                    with Peers
                 </Title>
                 <Paragraph style={{ 
                     color: 'rgba(255, 255, 255, 0.9)',
@@ -40,39 +39,45 @@ const MentorHero = ({ onSearch, onExpertiseChange }) => {
                     maxWidth: '600px',
                     marginBottom: '2rem'
                 }}>
-                    Connect with experienced mentors who can guide you through your startup journey.
+                    Find peers who can help you grow, while you help them too.
                 </Paragraph>
 
-                <Row gutter={16} style={{ maxWidth: '800px' }}>
+                <Space direction="vertical" size="large" style={{ width: '100%', marginBottom: '2rem' }}>
+                    <Space direction="vertical" size="middle">
+                        <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }}>
+                            <span style={{ marginRight: '12px' }}>🤝</span>
+                            Share skills with peers who understand your journey
+                        </Text>
+                        <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }}>
+                            <span style={{ marginRight: '12px' }}>💡</span>
+                            Match with peers based on complementary expertise
+                        </Text>
+    
+                    </Space>
+                </Space>
+
+                <Row gutter={[16, 16]} style={{ maxWidth: '900px' }}>
+                    <Col xs={24}>
+                        
+                    </Col>
                     <Col xs={24} md={16}>
                         <Search
-                            placeholder="Search by name or location"
+                            placeholder="Search by name, location or expertise"
                             allowClear
-                            enterButton={
-                                <Button 
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.2)',
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                                    color: 'white'
-                                }}
-                                className="hover:bg-white/30"
-                                >
-                                    Search
-                                </Button>
-                            }
+                            enterButton="Search"
                             size="large"
                             onSearch={onSearch}
                         />
                     </Col>
                     <Col xs={24} md={8}>
                         <Select
-                            placeholder="Select Expertise"
+                            placeholder="Filter by expertise"
                             style={{ width: '100%' }}
                             size="large"
                             defaultValue="all"
                             onChange={onExpertiseChange}
                         >
-                            <Select.Option value="all">All Expertise</Select.Option>
+                            <Select.Option value="all">All Expertise Areas</Select.Option>
                             {Object.entries(EXPERTISE_CATEGORIES).map(([category, expertises]) => (
                                 <Select.OptGroup key={category} label={category}>
                                     {expertises.map(expertise => (
