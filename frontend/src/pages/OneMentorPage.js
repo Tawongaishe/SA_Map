@@ -77,6 +77,7 @@ const OneMentorPage = () => {
                                     border: '1px solid #4C1D95',
                                     color: '#4C1D95'
                                 }}
+                                href={mentorData.mentor.linkedin}
                             >
                                 Connect on LinkedIn
                             </Button>
@@ -146,6 +147,29 @@ const OneMentorPage = () => {
                                 </div>
                             </div>
 
+                            <Divider style={{ margin: '1.5rem 0' }} />
+
+                            <div style={{ marginBottom: '2rem' }}>
+                                <Title level={4} style={{ color: '#4C1D95' }}>Mentor Needs</Title>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {mentorData.mentor.mentor_needs.map((need, index) => (
+                                        <Tag
+                                            key={index}
+                                            style={{
+                                                background: '#F3F4F6',
+                                                color: '#4B5563',
+                                                border: 'none',
+                                                borderRadius: '16px',
+                                                padding: '6px 16px',
+                                                fontSize: '0.9rem'
+                                            }}
+                                        >
+                                            {need}
+                                        </Tag>
+                                    ))}
+                                </div>
+                            </div>
+                            
                             <Divider style={{ margin: '1.5rem 0' }} />
 
                             <div>

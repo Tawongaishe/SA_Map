@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Empty, Typography } from 'antd';
 import MentorCard from '../components/MentorCard';
 import MentorHero from '../components/MentorHero';
+import MentorMatchesSection from '../components/MatchSection';
 
 const { Title } = Typography;
 
@@ -12,6 +13,7 @@ const MentorPage = () => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedExpertise, setSelectedExpertise] = useState('all');
+    const [userData, setUserData] = useState({id: localStorage.getItem('user_id')});
 
     useEffect(() => {
         const fetchMentors = async () => {
@@ -93,19 +95,32 @@ const filterMentors = (search, expertise) => {
                 expertiseOptions={getAllExpertises()}
             />
 
-            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 2rem' }}>
-                <Row gutter={[24, 24]}>
-                    {filteredMentors.map((mentor) => (
-                        <Col xs={24} sm={12} lg={8} key={mentor.id}>
-                            <MentorCard mentor={mentor} />
-                        </Col>
-                    ))}
-                </Row>
+            <MentorMatchesSection userData={userData} />  
 
-                {filteredMentors.length === 0 && (
-                    <Empty description="No mentors found matching your criteria" />
-                )}
-            </div>
+            <div style={{ marginBottom: '48px', maxWidth: '1200px', margin: '0 auto'}}>
+                <Title level={2} style={{ 
+                    marginBottom: '24px',
+                    color: '#1a1a1a',
+                    fontSize: '24px',
+                    fontWeight: 600,
+                    marginLeft: '2rem'
+                }}>
+                    Your Matches
+                </Title>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 2rem' }}>
+                    <Row gutter={[24, 24]}>
+                        {filteredMentors.map((mentor) => (
+                            <Col xs={24} sm={12} lg={8} key={mentor.id}>
+                                <MentorCard mentor={mentor} />
+                            </Col>
+                        ))}
+                    </Row>
+
+                    {filteredMentors.length === 0 && (
+                        <Empty description="No mentors found matching your criteria" />
+                    )}
+                </div>
+            </div>            
         </div>
     );
 };
