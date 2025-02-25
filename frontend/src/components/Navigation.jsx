@@ -16,6 +16,10 @@ const Navigation = ({ isAuthenticated, setIsAuthenticated }) => {
       key: "/",
       label: <NavLink to="/">Home</NavLink>
     },
+    {
+      key: "/startups",
+      label: <NavLink to="/startups">Startups</NavLink>
+    },
     ...(isAuthenticated
       ? [
           {

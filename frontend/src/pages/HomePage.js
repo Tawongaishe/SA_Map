@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StartupList from '../components/StartupList';
 import StartupCommunities from '../components/StartupCommunities';
-import StartupFinalists from '../components/StartupFinalists';
+import StartupSpotlight from '../components/StartupSpotlight';
 import StartupPrograms from '../components/StartupPrograms';
 import HomeHero from '../components/HomeHero';
 import { Layout, Spin, Typography } from 'antd';
@@ -103,9 +103,10 @@ const HomePage = () => {
                 margin: '0 auto',
                 backgroundColor: 'transparent'
             }}>
-                <div id="finalists">
-                    <StartupFinalists />
+                <div id="spotlight">
+                    <StartupSpotlight />
                 </div>
+                
 
                 <div id="communities">
                     <StartupCommunities />
