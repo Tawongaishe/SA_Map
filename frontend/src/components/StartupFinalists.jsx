@@ -288,8 +288,6 @@ const StartupFinalists = () => {
         marginBottom: 36,
         textAlign: 'center'
       }}>
-        
-        
         <Button 
           icon={<FileExcelOutlined />} 
           onClick={handleDownload}
@@ -305,16 +303,16 @@ const StartupFinalists = () => {
         <Paragraph style={{ 
           maxWidth: '800px', 
           color: '#333', 
-          fontSize: '16px',
+          fontSize: '14px',
           lineHeight: 1.6
         }}>
           We've compiled a starter database of over 100 innovative South African startups across various industries. 
-          The downloadable CSV provides  details including company names, industry sectors, and location. This is a small 
+          The downloadable CSV provides details including company names, industry sectors, and location. This is a small 
           start to connecting with South Africa's vibrant startup landscape.
         </Paragraph>
       </div>
 
-      <Row gutter={[32, 32]}>
+      <Row gutter={[24, 24]}>
         {finalists.map((finalist) => (
           <Col key={finalist.name} xs={24} sm={24} md={8} lg={8} xl={8}>
             <Card
@@ -328,7 +326,7 @@ const StartupFinalists = () => {
               }}
               hoverable
               bodyStyle={{ 
-                padding: '24px', 
+                padding: '20px', 
                 display: 'flex', 
                 flexDirection: 'column', 
                 height: '100%' 
@@ -339,23 +337,23 @@ const StartupFinalists = () => {
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center',
-                  marginBottom: 16 
+                  marginBottom: 12 
                 }}>
-                  <Title level={3} style={{ 
+                  <Title level={4} style={{ 
                     margin: 0, 
-                    fontSize: '22px',
+                    fontSize: '18px',
                     color: '#6b21a8' 
                   }}>
                     {finalist.name}
                   </Title>
-                  <div style={{ display: 'flex', gap: 12 }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
                     <a
                       href={finalist.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
                         color: '#0077B5',
-                        fontSize: '20px',
+                        fontSize: '16px',
                         display: 'flex',
                         alignItems: 'center'
                       }}
@@ -368,7 +366,7 @@ const StartupFinalists = () => {
                       rel="noopener noreferrer"
                       style={{
                         color: '#6b21a8',
-                        fontSize: '20px',
+                        fontSize: '16px',
                         display: 'flex',
                         alignItems: 'center'
                       }}
@@ -378,18 +376,18 @@ const StartupFinalists = () => {
                   </div>
                 </div>
                 
-                <div style={{ marginBottom: 16 }}>
-                  <Tag color="purple">{finalist.industry}</Tag>
-                  <Tag color="blue">{finalist.location}</Tag>
-                  <Tag color="cyan">Est. {finalist.founded}</Tag>
+                <div style={{ marginBottom: 12 }}>
+                  <Tag color="purple" style={{ fontSize: '12px' }}>{finalist.industry}</Tag>
+                  <Tag color="blue" style={{ fontSize: '12px' }}>{finalist.location}</Tag>
+                  <Tag color="cyan" style={{ fontSize: '12px' }}>Est. {finalist.founded}</Tag>
                 </div>
                 
-                <Divider style={{ margin: '16px 0' }} />
+                <Divider style={{ margin: '12px 0' }} />
                 
                 <Paragraph style={{ 
-                  marginBottom: 24,
-                  fontSize: '16px',
-                  lineHeight: '1.6',
+                  marginBottom: 16,
+                  fontSize: '14px',
+                  lineHeight: '1.5',
                   flexGrow: 1
                 }}>
                   {finalist.description}
@@ -397,11 +395,11 @@ const StartupFinalists = () => {
                 
                 <div style={{ 
                   background: '#f9f0ff', 
-                  padding: '12px 16px', 
+                  padding: '10px 14px', 
                   borderRadius: '8px'
                 }}>
-                  <Text strong style={{ color: '#6b21a8', fontSize: '16px' }}>
-                    <FireOutlined style={{ marginRight: 8 }} />
+                  <Text strong style={{ color: '#6b21a8', fontSize: '14px' }}>
+                    <FireOutlined style={{ marginRight: 6 }} />
                     {finalist.highlight}
                   </Text>
                 </div>
