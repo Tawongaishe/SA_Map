@@ -53,15 +53,16 @@ const StartupSpotlight = () => {
         }}>
         <span role="img" aria-label="spotlight"></span> Startup Spotlight
       </Title>
-      <Paragraph style={{ marginBottom: 24 }}>
-        Check out these outstanding South African startups making a significant impact in their industries.
-      </Paragraph>
+      <div style = { { marginBottom: 24 } }>
+        <Text style={{ color: '#8c8c8c', fontSize: '16px' }}>
+              Discover the some promising startups in South Africa, from innovative InsurTech platforms to sustainable CleanTech solutions
+            </Text>
+       </div>
       
       <Row gutter={[24, 24]}>
         {spotlightStartups.map((startup) => (
           <Col xs={24} sm={8} key={startup.name}>
             <Card
-              hoverable
               style={{ 
                 height: '100%', 
                 borderRadius: '12px',

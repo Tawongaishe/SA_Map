@@ -269,11 +269,14 @@ const StartupFinalists = () => {
   ];
 
   const handleDownload = () => {
-    // Create a download link for the public startups.csv file
+    // Create a robust download link for the public startups.csv file
     const link = document.createElement('a');
     link.href = '/startups.csv';
-    link.download = 'south-african-startups.csv';
+    link.setAttribute('download', 'south-african-startups.csv');
+    link.style.display = 'none';
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
 
   return (

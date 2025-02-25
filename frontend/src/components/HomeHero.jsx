@@ -7,10 +7,10 @@ const { Title, Paragraph, Text } = Typography;
 
 const HomeHero = () => {
     const stats = [
-        { number: '500+', label: 'Active Startups' },
+        { number: '100+', label: 'Startups' },
         { number: '50+', label: 'Peer Experts' },
-        { number: '20+', label: 'Local Communities' },
-        { number: '100+', label: 'Curated Resources' }
+        { number: '10+', label: 'Curated Resources' },
+        { number: '1', label: 'Centralized Hub' }
     ];
 
     return (
@@ -44,11 +44,11 @@ const HomeHero = () => {
                             <Space direction="vertical" size="middle">
                                 <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }}>
                                     <span style={{ marginRight: '12px' }}>📚</span>
-                                    Discover local startup resources, programs, and opportunities
+                                    Discover startup resources
                                 </Text>
                                 <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }}>
                                     <span style={{ marginRight: '12px' }}>🤝</span>
-                                    Connect with peers who share knowledge while seeking yours
+                                    Connect with peers
                                 </Text>
                                 <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }}>
                                     <span style={{ marginRight: '12px' }}>🌍</span>
@@ -102,8 +102,8 @@ const HomeHero = () => {
                                         />
                                     </Col>
                                 ))}
-                            </Row>
-                        </Card>
+                            </Row> 
+                         </Card>
                     </Col>
                 </Row>
             </div>

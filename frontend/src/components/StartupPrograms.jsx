@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Tag } from 'antd';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const StartupPrograms = () => {
   const programs = [
@@ -43,6 +43,12 @@ const StartupPrograms = () => {
         style={{ color: '#6B21A8' }} >
         <span role="img" aria-label="school">🎓</span> Startup Programs
       </Title>
+      <div style = { { marginBottom: 24 } }>
+        <Text style={{ color: '#8c8c8c', fontSize: '16px' }}>
+              We all need support to grow. Check out these programs that provide mentorship, funding, and resources to help startups succeed.
+            </Text>
+       </div>
+      
       <Row gutter={[16, 16]}>
         {programs.map((program) => (
           <Col xs={24} md={12} key={program.name}>
