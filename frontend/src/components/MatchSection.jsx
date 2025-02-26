@@ -12,9 +12,18 @@ const MatchCard = ({ match, matchType }) => {
     const renderExpertiseTags = (expertises) => {
         if (!expertises || expertises.length === 0) return null;
         
+        // Remove duplicates by expertise name
+        const uniqueExpertises = expertises.reduce((acc, current) => {
+            const expertiseName = current.expertise.name;
+            if (!acc.find(item => item.expertise.name === expertiseName)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+        
         return (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {expertises.slice(0, MAX_TAGS).map((exp, index) => (
+                {uniqueExpertises.slice(0, MAX_TAGS).map((exp, index) => (
                     <Tag
                         key={index}
                         style={{
@@ -30,7 +39,7 @@ const MatchCard = ({ match, matchType }) => {
                         {exp.expertise.name}
                     </Tag>
                 ))}
-                {expertises.length > MAX_TAGS && (
+                {uniqueExpertises.length > MAX_TAGS && (
                     <Tag
                         style={{
                             background: '#F3F4F6',
@@ -42,7 +51,7 @@ const MatchCard = ({ match, matchType }) => {
                             margin: 0
                         }}
                     >
-                        +{expertises.length - MAX_TAGS} more
+                        +{uniqueExpertises.length - MAX_TAGS} more
                     </Tag>
                 )}
             </div>

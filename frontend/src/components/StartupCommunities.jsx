@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Row, Col, Typography, Tag, Space, Button } from 'antd';
 import { GlobalOutlined, LinkedinFilled } from '@ant-design/icons';
 
-const { Title, Text, Link, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const StartupCommunities = () => {
   const communities = [
@@ -74,7 +74,8 @@ const StartupCommunities = () => {
         <Row gutter={[16, 16]}>
           {communities.map((community) => (
             <Col xs={24} md={12} key={community.name}>
-              <Card hoverable>
+              <Card
+>
                 <Space direction="vertical" size="small" style={{ width: '100%' }}>
                   <Title level={4} style={{ marginBottom: 8 }}>{community.name}</Title>
                   <Paragraph style={{ marginBottom: 16 }}>{community.description}</Paragraph>
@@ -88,6 +89,7 @@ const StartupCommunities = () => {
                         href={community.website}
                         target="_blank"
                         style={{ padding: 4 }}
+                        cursor="pointer"
                       />
                       <Button 
                         type="text" 
@@ -95,6 +97,7 @@ const StartupCommunities = () => {
                         href={community.linkedin}
                         target="_blank"
                         style={{ padding: 4 }}
+                        cursor="pointer"
                       />
                     </Space>
                   </Space>

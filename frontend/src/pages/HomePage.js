@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import StartupList from '../components/StartupList';
+import React, { useState } from 'react';
 import StartupCommunities from '../components/StartupCommunities';
-import StartupFinalists from '../components/StartupFinalists';
 import StartupPrograms from '../components/StartupPrograms';
+import StartupSpotlight from '../components/StartupSpotlight';
 import HomeHero from '../components/HomeHero';
-import { Layout, Spin, Typography } from 'antd';
+import { Layout, Typography } from 'antd';
 
 const { Content } = Layout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const HomePage = () => {
-    const [startups, setStartups] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [activeSection, setActiveSection] = useState('finalists');
 
     const scrollToSection = (sectionId) => {
@@ -22,33 +18,6 @@ const HomePage = () => {
         }
         setActiveSection(sectionId);
     };
-
-    useEffect(() => {
-        const fetchStartups = async () => {
-            try {
-                const response = await fetch('/api/startups', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                setStartups(data);
-            } catch (error) {
-                console.error('Error fetching startups:', error);
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStartups();
-    }, []);
 
     return (
         <Layout style={{ backgroundColor: '#EDE9FE', margin: '0' }}>
@@ -73,14 +42,17 @@ const HomePage = () => {
                     margin: '0 auto'
                 }}>
                     {[
-                        { key: 'finalists', label: 'Award Finalists' },
+                        { key: 'finalists', label: 'Spotlight Startups' },
                         { key: 'communities', label: 'Communities' },
-                        { key: 'programs', label: 'Programs' },
-                        { key: 'browse', label: 'Browse All' }
+                        { key: 'programs', label: 'Programs' }
                     ].map((item) => (
                         <a
+                            href="#"
                             key={item.key}
-                            onClick={() => scrollToSection(item.key)}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                scrollToSection(item.key);
+                            }}
                             style={{
                                 cursor: 'pointer',
                                 color: activeSection === item.key ? '#F97316' : '#4B5563',
@@ -104,7 +76,7 @@ const HomePage = () => {
                 backgroundColor: 'transparent'
             }}>
                 <div id="finalists">
-                    <StartupFinalists />
+                    <StartupSpotlight />
                 </div>
 
                 <div id="communities">
@@ -113,22 +85,6 @@ const HomePage = () => {
 
                 <div id="programs">
                     <StartupPrograms />
-                </div>
-
-                <div id="browse" style={{ marginTop: 24 }}>
-                    <Title level={2} style={{ color: '#F97316' }}>
-                        <span role="img" aria-label="search"></span> Browse All Startups
-                    </Title>
-                    {error && <Text type="danger">Error: {error}</Text>}
-                    {loading ? (
-                        <div style={{ textAlign: 'center', padding: '24px' }}>
-                            <Spin style={{ color: '#F97316' }} size="large" />
-                        </div>
-                    ) : startups.length > 0 ? (
-                        <StartupList startups={startups} />
-                    ) : (
-                        <Text>No startups found</Text>
-                    )}
                 </div>
             </Content>
         </Layout>

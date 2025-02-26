@@ -13,6 +13,7 @@ import SignupPage from "./pages/SignupPage";
 import PrivateRoute from "./components/PrivateRoute";
 import OneMentorPage from "./pages/OneMentorPage";
 import Navigation from "./components/Navigation"; // Import the new Navigation component
+import StartupDirectory from "./pages/StartupDirectory";
 import "./App.css";
 
 const { Content, Footer } = Layout;
@@ -47,6 +48,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="/startups" element={<StartupDirectory />} />
             <Route
               path="/profile"
               element={
