@@ -1,9 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, Avatar, Tag, Typography, Divider, Button } from 'antd';
-import { UserOutlined, EnvironmentOutlined, PhoneOutlined, LinkedinOutlined, CalendarOutlined } from '@ant-design/icons';
+import { UserOutlined, EnvironmentOutlined, PhoneOutlined, LinkedinOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
+
+// Helper function to get icon filename from ID
+const getProfileIcon = (iconId) => {
+  // Default to learning icon if no ID is provided
+  const id = iconId || 4;
+  return `/icons/${id}.png`;
+};
+
+// Mapping of icon IDs to their labels
+const iconLabels = {
+  1: 'Building',
+  2: 'Funding/Raising',
+  3: 'Connecting',
+  4: 'Learning'
+};
 
 const OneMentorPage = () => {
     const { mentorId } = useParams();
@@ -47,9 +62,11 @@ const OneMentorPage = () => {
                         >
                             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                                 <Avatar 
-                                    src={mentorData.user.image} 
+                                    src={mentorData.mentor.profile_icon_id ? 
+                                        getProfileIcon(mentorData.mentor.profile_icon_id) : 
+                                        mentorData.user.image} 
                                     size={120} 
-                                    icon={!mentorData.user.image && <UserOutlined />}
+                                    icon={(!mentorData.mentor.profile_icon_id && !mentorData.user.image) && <UserOutlined />}
                                     style={{
                                         border: '4px solid #EDE9FE',
                                         marginBottom: '1rem'
@@ -67,6 +84,23 @@ const OneMentorPage = () => {
                                     <EnvironmentOutlined style={{ marginRight: '0.5rem' }} />
                                     <Text>{mentorData.user.location || 'Location not specified'}</Text>
                                 </div>
+                                
+                                {mentorData.mentor.profile_icon_id && (
+                                    <Tag
+                                        style={{
+                                            background: '#EDE9FE',
+                                            color: '#5B21B6',
+                                            border: 'none',
+                                            borderRadius: '16px',
+                                            padding: '6px 16px',
+                                            fontSize: '0.9rem',
+                                            margin: '1rem 0',
+                                            display: 'inline-block'
+                                        }}
+                                    >
+                                        Primary Focus: {iconLabels[mentorData.mentor.profile_icon_id]}
+                                    </Tag>
+                                )}
                             </div>
 
                             <Button 

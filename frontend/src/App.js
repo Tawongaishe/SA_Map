@@ -14,6 +14,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import OneMentorPage from "./pages/OneMentorPage";
 import Navigation from "./components/Navigation"; // Import the new Navigation component
 import StartupDirectory from "./pages/StartupDirectory";
+import MentorOnboarding from "./pages/MentorOnboarding";
 import "./App.css";
 
 const { Content, Footer } = Layout;
@@ -65,6 +66,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+          <Route path="/mentor-onboarding" element={<MentorOnboarding />} />
           </Routes>
         </Content>
         <Footer

@@ -16,6 +16,7 @@ pip freeze -r > requirements.txt
 
 ## running backend 
 cd into top level 
+python -m backend.run
 
 
 

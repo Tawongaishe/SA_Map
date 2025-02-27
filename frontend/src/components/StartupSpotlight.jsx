@@ -8,16 +8,17 @@ const { Title, Paragraph, Text } = Typography;
 const StartupSpotlight = () => {
   const spotlightStartups = [
     {
-      name: "LeaseSurance",
-      description: "Innovative insurance platform that simplifies rental deposit insurance for tenants and landlords.",
-      industry: "InsurTech",
-      founded: "2020",
-      location: "Johannesburg",
-      highlight: "Secured R12M in venture funding",
-      linkedin: "https://www.linkedin.com/company/leasesurance/",
-      website: "https://leasesurance.co.za",
-      imagePlaceholder: "/api/placeholder/400/200"
-    },
+      name: "Buzzer - Community Safety App",
+      description: "Mobile safety solution that connects communities and emergency services for faster response times.",
+      industry: "SafetyTech",
+      founded: "2017",
+      location: "Pretoria",
+      highlight: "200+ communities protected",
+      linkedin: "https://buzzer-app.co.za/",
+      website: "https://buzzer-app.co.za",
+      imagePlaceholder: "/buzzer.png"
+    },  
+  
     {
       name: "Sellers Plug",
       description: "A vendor management system used for ecommerce platforms to streamline supplier relationships.",
@@ -27,7 +28,7 @@ const StartupSpotlight = () => {
       highlight: "R50M in transactions monthly",
       linkedin: "https://www.linkedin.com/company/sellers-plug/",
       website: "https://sellersplug.co.za",
-      imagePlaceholder: "/api/placeholder/400/200"
+      imagePlaceholder: "/sellersplug.png"
     },
     {
       name: "Plentify",
@@ -38,7 +39,7 @@ const StartupSpotlight = () => {
       highlight: "50,000+ homes equipped",
       linkedin: "https://www.linkedin.com/company/plentify/",
       website: "https://plentify.com",
-      imagePlaceholder: "/api/placeholder/400/200"
+      imagePlaceholder: "/plentify.png"
     }
   ];
 
@@ -74,7 +75,7 @@ const StartupSpotlight = () => {
                 <div style={{
                   height: 200,
                   background: '#f0f0f0',
-                  backgroundImage: `url(/api/placeholder/400/320)`,
+                  backgroundImage: `url(${startup.imagePlaceholder})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   position: 'relative'

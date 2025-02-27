@@ -7,6 +7,13 @@ const { Paragraph } = Typography;
 
 const MentorCard = ({ mentor }) => {
     const MAX_TAGS = 3;
+    
+    // Get the profile icon based on the profile_icon_id
+    const getProfileIcon = (iconId) => {
+        // Default to learning icon if no ID is provided
+        const id = iconId || 4;
+        return `/icons/${id}.png`;
+    };
 
     return (
         <Card
@@ -24,9 +31,9 @@ const MentorCard = ({ mentor }) => {
                 {/* Header section with avatar and basic info */}
                 <div style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "16px" }}>
                     <Avatar
-                        src={mentor.image}
+                        src={mentor.profile_icon_id ? getProfileIcon(mentor.profile_icon_id) : mentor.image}
                         size={56}
-                        icon={!mentor.image && <UserOutlined />}
+                        icon={(!mentor.profile_icon_id && !mentor.image) && <UserOutlined />}
                         style={{
                             backgroundColor: '#f0f2f5',
                             border: '2px solid #ffffff',

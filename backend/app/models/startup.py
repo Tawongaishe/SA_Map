@@ -42,6 +42,7 @@ class Mentor(db.Model):
     name = db.Column(db.String(100), nullable=False)
     contact_info = db.Column(db.String(100))
     linkedin = db.Column(db.String(100))
+    profile_icon_id = db.Column(db.Integer, default=4)  
     
     # Many-to-many relationship with Expertise (for expertises)
     expertises = db.relationship('Expertise', secondary=mentor_expertise, back_populates='mentors_expertise')
@@ -64,6 +65,8 @@ class Mentor(db.Model):
             "contact_info": self.contact_info,
             "linkedin": self.linkedin if self.linkedin else "",
             "mentor_needs": [expertise.name for expertise in self.needed_expertises],  # List of expertise names
+            "profile_icon_id": self.profile_icon_id
+            
         }
 
 class Expertise(db.Model):

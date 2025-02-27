@@ -41,7 +41,7 @@ const StartupPrograms = () => {
     <div style={{ marginBottom: 24 }}>
       <Title level={2}
         style={{ color: '#6B21A8' }} >
-        <span role="img" aria-label="school">🎓</span> Startup Programs
+        <span role="img" aria-label="school"></span> Startup Programs
       </Title>
       <div style = { { marginBottom: 24 } }>
         <Text style={{ color: '#8c8c8c', fontSize: '16px' }}>

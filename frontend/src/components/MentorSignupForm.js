@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Select, Button, Tag, message } from 'antd';
+import { Form, Input, Select, Button, Tag, message, Radio, Space } from 'antd';
 
 const { Option } = Select;
 
@@ -8,10 +8,19 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
         name: mentor?.name || '',
         contact_info: mentor?.contact_info || '',
         linkedin: mentor?.linkedin || '',
+        profile_icon_id: mentor?.profile_icon_id || 4, // Default to learning (4)
     });
     const [expertiseOptions, setExpertiseOptions] = useState([]);
     const [selectedExpertiseIds, setSelectedExpertiseIds] = useState([]);
     const [selectedMentorNeedsIds, setSelectedMentorNeedsIds] = useState([]);
+
+    // Profile icon options
+    const iconOptions = [
+        { id: 1, label: 'Building', description: 'For those actively developing their product or service' },
+        { id: 2, label: 'Funding/Raising', description: 'For startups seeking capital or preparing for fundraising' },
+        { id: 3, label: 'Connecting', description: 'For those seeking partnerships or community' },
+        { id: 4, label: 'Learning', description: 'For students and those seeking knowledge' },
+    ];
 
     // Fetch expertise options from the backend
     useEffect(() => {
@@ -29,15 +38,17 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
         fetchExpertiseOptions();
     }, []);
 
-    // Sync selectedExpertiseIds with mentor data when mentor prop changes
+    // Sync data when mentor prop changes
     useEffect(() => {
         if (mentor) {
             setFormData({
                 name: mentor.name || '',
                 contact_info: mentor.contact_info || '',
+                linkedin: mentor.linkedin || '',
+                profile_icon_id: mentor.profile_icon_id || 4,
             });
 
-            // Match expertise names in `mentor.expertises` to their corresponding IDs in `expertiseOptions`
+            // Match expertise names
             if (expertiseOptions.length > 0) {
                 const matchedExpertiseIds = expertiseOptions
                     .filter((opt) => mentor.expertises.includes(opt.name))
@@ -56,15 +67,11 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
     const handleFormSubmit = async () => {
         const submitData = {
             ...formData,
-            expertises: selectedExpertiseIds, // Send IDs of the expertise to the backend
+            expertises: selectedExpertiseIds,
             mentor_needs: selectedMentorNeedsIds,
         };
 
-        // const method = mentor ? 'PUT' : 'POST';
-        // const endpoint = mentor ? `/mentors/me` : `/mentors`;
-
         try {
-            // Replace this with the actual API endpoint
             const response = await fetch(`/api/mentors${mentor ? '/me' : ''}`, {
                 method: mentor ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -93,11 +100,20 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
         setSelectedMentorNeedsIds(selectedIds);
     };
 
+    // Handle profile icon selection
+    const handleIconChange = (e) => {
+        setFormData({ ...formData, profile_icon_id: parseInt(e.target.value) });
+    };
+
     return (
         <Form
             layout="vertical"
             onFinish={handleFormSubmit}
-            initialValues={{ ...formData, expertises: selectedExpertiseIds }}
+            initialValues={{ 
+                ...formData, 
+                expertises: selectedExpertiseIds,
+                profile_icon_id: formData.profile_icon_id 
+            }}
         >
             {/* Name */}
             <Form.Item
@@ -110,6 +126,52 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
+            </Form.Item>
+
+            {/* Profile Icon Selection */}
+            <Form.Item
+                label="What best describes your primary need?"
+                name="profile_icon_id"
+                rules={[{ required: true, message: 'Please select your primary need!' }]}
+            >
+                <Radio.Group onChange={handleIconChange} value={formData.profile_icon_id}>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                        {iconOptions.map(icon => (
+                            <Radio.Button 
+                                key={icon.id} 
+                                value={icon.id}
+                                style={{ 
+                                    width: '100%', 
+                                    height: 'auto',
+                                    padding: '10px 15px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    border: formData.profile_icon_id === icon.id ? '2px solid #1890ff' : '1px solid #d9d9d9',
+                                    backgroundColor: formData.profile_icon_id === icon.id ? '#e6f7ff' : 'white',
+                                    marginBottom: '8px',
+                                    borderRadius: '6px'
+                                }}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <img 
+                                        src={`/icons/${icon.id}.png`} 
+                                        alt={icon.label}
+                                        style={{ 
+                                            width: '40px', 
+                                            height: '40px', 
+                                            marginRight: '15px',
+                                            borderRadius: '50%',
+                                        }}
+                                    />
+                                    <div>
+                                        <div style={{ fontWeight: 'bold' }}>{icon.label}</div>
+                                        <div style={{ fontSize: '12px', color: '#666' }}>{icon.description}</div>
+                                    </div>
+                                </div>
+                            </Radio.Button>
+                        ))}
+                    </Space>
+                </Radio.Group>
             </Form.Item>
 
             {/* Expertise */}
@@ -202,7 +264,6 @@ const MentorSignupForm = ({ mentor, onSave, onSuccess }) => {
                     })}
                 </div>
             </Form.Item>
-
 
             {/* Submit Button */}
             <Form.Item>
