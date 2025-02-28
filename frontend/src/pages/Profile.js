@@ -174,7 +174,7 @@ const Profile = ({ setIsAuthenticated }) => {
                 
                 {/* Mentor Profile Section */}
                 <section>
-                    <Title level={4} style={{ color: '#6B21A8' }}>Mentor Profile</Title>
+                    <Title level={4} style={{ color: '#6B21A8' }}>Peer Expert Profile</Title>
                     <p>Share your expertise with others in the South African startup community.</p>
                     
                     {mentor ? (

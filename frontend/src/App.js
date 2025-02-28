@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Navigate,
 } from "react-router-dom";
 import { Layout } from "antd";
 import HomePage from "./pages/HomePage";
@@ -12,22 +13,67 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PrivateRoute from "./components/PrivateRoute";
 import OneMentorPage from "./pages/OneMentorPage";
-import Navigation from "./components/Navigation"; // Import the new Navigation component
+import Navigation from "./components/Navigation";
 import StartupDirectory from "./pages/StartupDirectory";
-import MentorOnboarding from "./pages/MentorOnboarding";
+import MentorOnboarding from "./components/MentorOnboarding";
+import MentorOnboardingController from "./components/MentorOnboardingController";
 import "./App.css";
 
 const { Content, Footer } = Layout;
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    const userId = localStorage.getItem("user_id");
-    if (userId) {
-      setIsAuthenticated(true);
-    }
+    const checkAuth = async () => {
+      try {
+        setCheckingAuth(true);
+        const userId = localStorage.getItem("user_id");
+        if (userId) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkAuth();
   }, []);
+
+  // Handle successful login with mentor check
+  const handleLoginSuccess = async (userData) => {
+    setIsAuthenticated(true);
+    localStorage.setItem("user_id", userData.id);
+    
+    // Check if user already has a mentor profile
+    try {
+      const response = await fetch('/api/mentors/me', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (!data.mentor) {
+          // User doesn't have a mentor profile, redirect to onboarding
+          return <Navigate to="/mentor-onboarding-flow" />;
+        }
+      }
+    } catch (error) {
+      console.error("Error checking mentor status:", error);
+    }
+    
+    // Default navigation if there's an error or user has mentor profile
+    return <Navigate to="/profile" />;
+  };
+
+  if (checkingAuth) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
@@ -66,7 +112,18 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-          <Route path="/mentor-onboarding" element={<MentorOnboarding />} />
+            {/* Current manual mentor onboarding page */}
+            <Route path="/mentor-onboarding" element={<MentorOnboarding />} />
+            
+            {/* New automatic mentor onboarding flow */}
+            <Route
+              path="/mentor-onboarding-flow"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <MentorOnboardingController />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </Content>
         <Footer
