@@ -63,7 +63,7 @@ const StartupCommunities = () => {
               fontWeight: 600
             }}
           >
-            South Africa's Thriving Tech Communities
+            South Africa's Tech Communities
           </Title>
           <Text style={{ color: '#8c8c8c', fontSize: '16px' }}>
             Discover the vibrant networks and communities that are shaping South Africa's tech landscape, 

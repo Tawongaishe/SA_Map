@@ -54,6 +54,14 @@ def sign_up_mentor():
         print(mentor_needs)
         if not isinstance(mentor_needs, list):
             return jsonify({"error": "mentor_needs must be a list of strings"}), 400
+        
+        #get profile icon id
+        profile_icon_id = data.get("profile_icon_id", 4)  # Default to 4 if not provided
+        if not isinstance(profile_icon_id, int):
+            return jsonify({"error": "profile_icon_id must be an integer"}), 400
+        if profile_icon_id < 1 or profile_icon_id > 4:
+            return jsonify({"error": "profile_icon_id must be between 1 and 4"}), 400
+        
 
         # Create new mentor profile
         new_mentor = Mentor(
@@ -62,7 +70,9 @@ def sign_up_mentor():
             contact_info=data["contact_info"],
             expertises=expertise_list,  # Assuming a many-to-many relationship
             linkedin=data.get("linkedin"),
-            needed_expertises=mentor_needs
+            needed_expertises=mentor_needs,
+            profile_icon_id=profile_icon_id
+            
         )
 
         # Save the new mentor profile to the database
@@ -205,6 +215,14 @@ def update_my_mentor_profile():
         mentor_needs_ids = data["mentor_needs"] 
         expertise_list = Expertise.query.filter(Expertise.id.in_(mentor_needs_ids)).all()
         mentor.needed_expertises = expertise_list
+
+    if "profile_icon_id" in data:
+        profile_icon_id = data["profile_icon_id"]
+        if not isinstance(profile_icon_id, int):
+            return jsonify({"error": "profile_icon_id must be an integer"}), 400
+        if profile_icon_id < 1 or profile_icon_id > 4:
+            return jsonify({"error": "profile_icon_id must be between 1 and 4"}), 400
+        mentor.profile_icon_id = profile_icon_id
 
     db.session.commit()
 

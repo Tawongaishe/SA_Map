@@ -24,7 +24,7 @@ const Navigation = ({ isAuthenticated, setIsAuthenticated }) => {
       ? [
           {
             key: "/mentors",
-            label: <NavLink to="/mentors">Mentors</NavLink>
+            label: <NavLink to="/mentors">Peer Experts</NavLink>
           },
           {
             key: "/profile",
