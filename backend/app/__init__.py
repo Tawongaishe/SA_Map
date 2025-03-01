@@ -35,16 +35,14 @@ def create_app():
     login_manager.session_protection = 'strong'
     
     # Import and register blueprints
-    from backend.app.main.routes import main_bp
+
     from backend.app.auth.routes import auth as auth_bp
     from backend.app.mentor.routes import mentor_bp
-    from backend.app.startup.routes import startup_bp
     from backend.app.user.routes import user_bp
     
-    app.register_blueprint(main_bp, url_prefix='/api')
+    
     app.register_blueprint(auth_bp, url_prefix='/api')
     app.register_blueprint(mentor_bp, url_prefix='/api')
-    app.register_blueprint(startup_bp, url_prefix='/api')
     app.register_blueprint(user_bp, url_prefix='/api')
     
     return app
