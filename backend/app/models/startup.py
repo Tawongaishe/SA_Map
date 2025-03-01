@@ -1,25 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from backend.app import db, login_manager
 
-class Startup(db.Model):
-    __tablename__ = 'startup'
-    __table_args__ = {'extend_existing': True} 
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    industry = db.Column(db.String(100))
-    location = db.Column(db.String(100))
-    
-    def __repr__(self):
-        return f'<Startup {self.name}>'
-    
-    def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "industry": self.industry,
-            "location": self.location,
-        }
 
 # Association table for many-to-many relationship between Mentor and Expertise
 mentor_expertise = db.Table('mentor_expertise',
