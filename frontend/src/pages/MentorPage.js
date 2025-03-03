@@ -105,7 +105,7 @@ const filterMentors = (search, expertise) => {
                     fontWeight: 600,
                     marginLeft: '2rem'
                 }}>
-                    Your Matches
+                    Peer Experts
                 </Title>
                 <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 2rem' }}>
                     <Row gutter={[24, 24]}>
