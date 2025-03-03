@@ -27,7 +27,7 @@ const StartupSpotlight = () => {
       location: "Johannesburg",
       highlight: "R50M in transactions monthly",
       linkedin: "https://www.linkedin.com/company/sellers-plug/",
-      website: "https://sellersplug.co.za",
+      website: "https://sellersplug.com",
       imagePlaceholder: "/sellersplug.png"
     },
     {
@@ -38,7 +38,7 @@ const StartupSpotlight = () => {
       location: "Cape Town",
       highlight: "50,000+ homes equipped",
       linkedin: "https://www.linkedin.com/company/plentify/",
-      website: "https://plentify.com",
+      website: "https://plentify.io",
       imagePlaceholder: "/plentify.png"
     }
   ];
