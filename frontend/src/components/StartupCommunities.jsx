@@ -24,7 +24,7 @@ const StartupCommunities = () => {
       name: "Silicon Cape",
       description: "Non-profit enabling and connecting tech entrepreneurs in the Western Cape ecosystem through events and resources.",
       members: "15K+",
-      website: "https://siliconcape.com",
+      website: "https://www.linkedin.com/company/the-silicon-cape-initiative",
       linkedin: "https://www.linkedin.com/company/the-silicon-cape-initiative"
     },
     {
