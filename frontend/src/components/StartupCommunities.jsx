@@ -11,21 +11,21 @@ const StartupCommunities = () => {
       description: "One of South Africa's largest tech communities, focusing on connecting tech professionals, sharing job opportunities, and fostering collaboration.",
       members: "20K+",
       website: "https://zatech.co.za",
-      linkedin: "https://www.linkedin.com/company/zatech-community/"
+      linkedin: "https://zatech.co.za"
     },
     {
       name: "StartupClubZA",
       description: "Premier startup community fostering innovation and growth through events, mentorship, and networking opportunities.",
       members: "5K+",
-      website: "https://startupclubza.com",
-      linkedin: "https://www.linkedin.com/company/startupclubza/"
+      website: "https://www.linkedin.com/company/startup-club-za",
+      linkedin: "https://www.linkedin.com/company/startup-club-za"
     },
     {
       name: "Silicon Cape",
       description: "Non-profit enabling and connecting tech entrepreneurs in the Western Cape ecosystem through events and resources.",
       members: "15K+",
       website: "https://siliconcape.com",
-      linkedin: "https://www.linkedin.com/company/silicon-cape/"
+      linkedin: "https://www.linkedin.com/company/the-silicon-cape-initiative"
     },
     {
       name: "Future Females",
@@ -39,7 +39,7 @@ const StartupCommunities = () => {
       description: "Platform for entrepreneurs to learn from other entrepreneurs through events and workshops.",
       members: "25K+",
       website: "https://heavychef.com",
-      linkedin: "https://www.linkedin.com/company/heavy-chef/"
+      linkedin: "https://www.linkedin.com/company/heavychef/"
     },
     {
       name: "Startup Grind Cape Town",
