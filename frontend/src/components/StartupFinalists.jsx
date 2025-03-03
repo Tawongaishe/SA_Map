@@ -6,16 +6,7 @@ const { Title, Text, Paragraph, Link } = Typography;
 
 const StartupFinalists = () => {
   const finalists = [
-      {
-        name: "Mergemega",
-        description: "Digital platform streamlining business compliance and company registration processes for South African entrepreneurs.",
-        industry: "LegalTech",
-        founded: "2020",
-        location: "Johannesburg",
-        highlight: "10,000+ businesses served",
-        linkedin: "https://www.linkedin.com/company/mergemega/",
-        website: "https://mergemega.com"
-      },
+      
       {
         name: "BioCertica",
         description: "Provides DNA testing kits offering insights into health, fitness, and ancestry for personalized wellness.",
@@ -34,7 +25,7 @@ const StartupFinalists = () => {
         location: "Johannesburg",
         highlight: "Winner of WHO Innovation Challenge",
         linkedin: "https://www.linkedin.com/company/marihealth-solutions/",
-        website: "https://marihealth.co.za"
+        website: "https://marihealth.com"
       },
       {
         name: "Plentify",
@@ -44,7 +35,7 @@ const StartupFinalists = () => {
         location: "Cape Town",
         highlight: "50,000+ homes equipped",
         linkedin: "https://www.linkedin.com/company/plentify/",
-        website: "https://plentify.com"
+        website: "https://plentify.co.za"
       },
       {
         name: "Plant the Seed",
@@ -54,7 +45,7 @@ const StartupFinalists = () => {
         location: "N/A",
         highlight: "Trained numerous learners and diverted significant waste from landfills",
         linkedin: "https://planttheseed.co.za",
-        website: "https://planttheseed.co.za"
+        website: "https://www.linkedin.com/company/plant-the-seed-education"
       },
       {
         name: "Buzzer - Community Safety App",
@@ -84,7 +75,7 @@ const StartupFinalists = () => {
         location: "Cape Town",
         highlight: "Protected 50,000+ hectares",
         linkedin: "https://www.linkedin.com/company/conservio/",
-        website: "https://conservio.co.za"
+        website: "https://conservio.com"
       },
       {
         name: "KasiD Pty Ltd",
@@ -114,7 +105,7 @@ const StartupFinalists = () => {
         location: "Cape Town",
         highlight: "Improving outcomes for 5,000+ students",
         linkedin: "https://www.linkedin.com/company/kellerthinking/",
-        website: "https://kellereducation.co.za"
+        website: "https://keller.education"
       },
       {
         name: "Limu Lab",
@@ -144,7 +135,7 @@ const StartupFinalists = () => {
         location: "Johannesburg",
         highlight: "Secured R12M in venture funding",
         linkedin: "https://www.linkedin.com/company/leasesurance/",
-        website: "https://leasesurance.co.za"
+        website: "https://leasesurance.co"
       },
       {
         name: "Crayon",
@@ -174,15 +165,15 @@ const StartupFinalists = () => {
         location: "N/A",
         highlight: "Trusted by thousands of installation and service teams.",
         linkedin: "https://servcraft.co.za",
-        website: "https://servcraft.co.za"
+        website: "https://www.linkedin.com/company/servcraft"
       },
       {
         name: "Engage Mx",
-        description: "Marketing engagement platform helping brands create interactive customer experiences.",
-        industry: "MarTech",
+        description: "Engage Mx delivers the next generation of proactive, preventative, and personalized care.",
+        industry: "HealthTech",
         founded: "2017",
         location: "Pretoria",
-        highlight: "Serving top 50 SA retail brands",
+        highlight: "Winner of SAFT awards",
         linkedin: "https://www.engagemx.co.za/",
         website: "https://www.engagemx.co.za"
       },
@@ -198,23 +189,23 @@ const StartupFinalists = () => {
       },
       {
         name: "Welo Health",
-        description: "Digital health platform providing affordable telemedicine services to rural communities.",
+        description: "Providing on-demand workplace and homecare services to health insurers and corporations.",
         industry: "HealthTech",
         founded: "2021",
-        location: "Durban",
+        location: "Johannesburg",
         highlight: "30,000+ consultations delivered",
         linkedin: "https://www.linkedin.com/company/welo-health/",
-        website: "https://welohealth.co.za"
+        website: "https://welo.health"
       },
       {
         name: "Sellers Plug",
-        description: "Vendor management system for ecommerce platforms to streamline supplier relationships.",
+        description: "Simplify your procurement of Hardware and Building Supplies.",
         industry: "eCommerce",
         founded: "2020",
         location: "Johannesburg",
         highlight: "Processing R50M in transactions monthly",
         linkedin: "https://www.linkedin.com/company/sellers-plug/",
-        website: "https://sellersplug.co.za"
+        website: "https://sellersplug.com"
       },
       {
         name: "Tributree",
@@ -228,21 +219,21 @@ const StartupFinalists = () => {
       },
       {
         name: "Eagle Eye Defence",
-        description: "Advanced surveillance and security systems for both commercial and residential applications.",
+        description: "Advanced security systems for prevention of unauthorised use of vehicles / machinery",
         industry: "SecurityTech",
         founded: "2018",
         location: "Pretoria",
         highlight: "Protecting 150+ high-security sites",
         linkedin: "https://www.linkedin.com/company/eagle-eye-defence/",
-        website: "https://eagleeye.co.za"
+        website: "https://www.linkedin.com/company/eagle-eye-defence/"
       },
       {
         name: "Smartee - IES",
-        description: "IoT solutions for intelligent energy management in commercial and industrial buildings.",
+        description: "IoT solutions and cloud-based technology solutions to custom problems.",
         industry: "IoT",
         founded: "2017",
         location: "Johannesburg",
-        highlight: "Reducing energy costs by 35%",
+        highlight: "Trusted by Spar & other big brands",
         linkedin: "https://www.linkedin.com/company/smartee-ies/",
         website: "https://smartee.co.za"
       },
@@ -254,7 +245,7 @@ const StartupFinalists = () => {
         location: "Cape Town",
         highlight: "100+ charging stations nationwide",
         linkedin: "https://www.linkedin.com/company/zimicharge/",
-        website: "https://zimicharge.co.za"
+        website: "https://zimicharge.com"
       },
       {
         name: "Fuel Switch",
@@ -264,7 +255,7 @@ const StartupFinalists = () => {
         location: "Johannesburg",
         highlight: "Reduced carbon footprint by 10,000+ tons",
         linkedin: "https://www.linkedin.com/company/alliance-for-rural-electrification/",
-        website: "https://fuelswitch.co.za"
+        website: "https://fuelswitch.io"
       }
     ];
   
