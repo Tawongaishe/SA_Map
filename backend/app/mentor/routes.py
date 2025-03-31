@@ -297,71 +297,230 @@ def get_expertise_categories():
     ]
     return jsonify(serialized_categories), 200
 
+# #get matching mentors
+
+# @mentor_bp.route("/matches/golden/<int:user_id>", methods=["GET"])
+# @login_required
+# def get_golden_matches(user_id):
+#     print(user_id)
+#     mentor = Mentor.query.filter_by(user_id=user_id).first()
+#     if not mentor:
+#         return jsonify({"error": "Mentor profile not found"}), 404
+    
+    
+#     # Get all mentors except the current one
+#     all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+#     golden_matches = []
+    
+#     for other_mentor in all_other_mentors:
+#         match_score = 0
+#         my_offerings_their_needs = []
+#         their_offerings_my_needs = []
+        
+#         # Check what I can offer them (my expertises vs their needs)
+#         for my_expertise in mentor.expertises:
+#             for their_need in other_mentor.needed_expertises:
+#                 # Direct L2 match
+#                 if my_expertise.id == their_need.id:
+#                     match_score += 2
+#                     my_offerings_their_needs.append({
+#                         "type": "L2",
+#                         "expertise": my_expertise.serialize()
+#                     })
+#                 # L1 category match
+#                 elif my_expertise.category_id == their_need.category_id:
+#                     match_score += 1
+#                     my_offerings_their_needs.append({
+#                         "type": "L1",
+#                         "expertise": my_expertise.serialize()
+#                     })
+        
+#         # Check what they can offer me (their expertises vs my needs)
+#         for their_expertise in other_mentor.expertises:
+#             for my_need in mentor.needed_expertises:
+#                 # Direct L2 match
+#                 if their_expertise.id == my_need.id:
+#                     match_score += 2
+#                     their_offerings_my_needs.append({
+#                         "type": "L2",
+#                         "expertise": their_expertise.serialize()
+#                     })
+#                 # L1 category match
+#                 elif their_expertise.category_id == my_need.category_id:
+#                     match_score += 1
+#                     their_offerings_my_needs.append({
+#                         "type": "L1",
+#                         "expertise": their_expertise.serialize()
+#                     })
+        
+#         # If there's at least one match in both directions
+#         if my_offerings_their_needs and their_offerings_my_needs:
+#             golden_matches.append({
+#                 "mentor": other_mentor.serialize(),
+#                 "match_score": match_score,
+#                 "i_can_offer": my_offerings_their_needs,
+#                 "they_can_offer": their_offerings_my_needs
+#             })
+    
+#     # Sort by match score descending
+#     golden_matches.sort(key=lambda x: x["match_score"], reverse=True)
+    
+#     return jsonify({
+#         "matches": golden_matches
+#     })
+
+
+# @mentor_bp.route('/matches/can-help/<int:user_id>', methods=['GET'])
+# @login_required
+# def get_mentors_i_can_help(user_id):
+#     """
+#     Find mentors that the current mentor can help based on their expertise
+#     """
+#     mentor = Mentor.query.filter_by(user_id=user_id).first()
+#     if not mentor:
+#         return jsonify({"error": "Mentor profile not found"}), 404
+    
+#     # Get all mentors except the current one
+#     all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+#     potential_matches = []
+    
+#     for other_mentor in all_other_mentors:
+#         matches = []
+        
+#         # Check what I can offer them
+#         for my_expertise in mentor.expertises:
+#             for their_need in other_mentor.needed_expertises:
+#                 # Direct L2 match
+#                 if my_expertise.id == their_need.id:
+#                     matches.append({
+#                         "type": "L2",
+#                         "expertise": my_expertise.serialize()
+#                     })
+#                 # L1 category match
+#                 elif my_expertise.category_id == their_need.category_id:
+#                     matches.append({
+#                         "type": "L1",
+#                         "expertise": my_expertise.serialize()
+#                     })
+        
+#         if matches:
+#             potential_matches.append({
+#                 "mentor": other_mentor.serialize(),
+#                 "matches": matches
+#             })
+    
+#     return jsonify({
+#         "matches": potential_matches
+#     })
+
+# @mentor_bp.route('/matches/can-help-me/<int:user_id>', methods=['GET'])
+# @login_required
+# def get_mentors_who_can_help(user_id):
+#     """
+#     Find mentors that can help the current mentor based on their needs
+#     """
+#     mentor = Mentor.query.filter_by(user_id=user_id).first()
+#     if not mentor:
+#         return jsonify({"error": "Mentor profile not found"}), 404
+    
+#     # Get all mentors except the current one
+#     all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+#     potential_matches = []
+    
+#     for other_mentor in all_other_mentors:
+#         matches = []
+        
+#         # Check what they can offer me
+#         for their_expertise in other_mentor.expertises:
+#             for my_need in mentor.needed_expertises:
+#                 # Direct L2 match
+#                 if their_expertise.id == my_need.id:
+#                     matches.append({
+#                         "type": "L2",
+#                         "expertise": their_expertise.serialize()
+#                     })
+#                 # L1 category match
+#                 elif their_expertise.category_id == my_need.category_id:
+#                     matches.append({
+#                         "type": "L1",
+#                         "expertise": their_expertise.serialize()
+#                     })
+        
+#         if matches:
+#             potential_matches.append({
+#                 "mentor": other_mentor.serialize(),
+#                 "matches": matches
+#             })
+    
+#     return jsonify({
+#         "matches": potential_matches
+#     })
+
+
+def get_mentor_or_404(user_id):
+    """Retrieve mentor by user ID or return 404 error."""
+    mentor = Mentor.query.filter_by(user_id=user_id).first()
+    if not mentor:
+        return None, jsonify({"error": "Mentor profile not found"}), 404
+    return mentor, None, None
+
+def get_all_other_mentors(user_id):
+    """Retrieve all other mentors except the current one."""
+    return Mentor.query.filter(Mentor.user_id != user_id).all()
+
+def find_matches(expertises, needed_expertises, match_type):
+    """Find L1 and L2 matches between two sets of expertise/needs."""
+    matches = []
+    match_score = 0
+
+    for expertise in expertises:
+        for need in needed_expertises:
+            # L2 match (direct match)
+            if expertise.id == need.id:
+                matches.append({
+                    "type": "L2",
+                    "expertise": expertise.serialize()
+                })
+                match_score += 2
+            # L1 match (category match)
+            elif expertise.category_id == need.category_id:
+                matches.append({
+                    "type": "L1",
+                    "expertise": expertise.serialize()
+                })
+                match_score += 1
+    
+    return matches, match_score
+
+def get_sorted_matches(matches):
+    """Sort matches by match_score in descending order."""
+    return sorted(matches, key=lambda x: x["match_score"], reverse=True)
+
+
 @mentor_bp.route("/matches/golden/<int:user_id>", methods=["GET"])
 @login_required
 def get_golden_matches(user_id):
-    print(user_id)
-    mentor = Mentor.query.filter_by(user_id=user_id).first()
-    if not mentor:
-        return jsonify({"error": "Mentor profile not found"}), 404
+    mentor, error_response, status_code = get_mentor_or_404(user_id)
+    if error_response:
+        return error_response, status_code
     
-    
-    # Get all mentors except the current one
-    all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+    all_other_mentors = get_all_other_mentors(user_id)
     golden_matches = []
-    
+
     for other_mentor in all_other_mentors:
-        match_score = 0
-        my_offerings_their_needs = []
-        their_offerings_my_needs = []
-        
-        # Check what I can offer them (my expertises vs their needs)
-        for my_expertise in mentor.expertises:
-            for their_need in other_mentor.needed_expertises:
-                # Direct L2 match
-                if my_expertise.id == their_need.id:
-                    match_score += 2
-                    my_offerings_their_needs.append({
-                        "type": "L2",
-                        "expertise": my_expertise.serialize()
-                    })
-                # L1 category match
-                elif my_expertise.category_id == their_need.category_id:
-                    match_score += 1
-                    my_offerings_their_needs.append({
-                        "type": "L1",
-                        "expertise": my_expertise.serialize()
-                    })
-        
-        # Check what they can offer me (their expertises vs my needs)
-        for their_expertise in other_mentor.expertises:
-            for my_need in mentor.needed_expertises:
-                # Direct L2 match
-                if their_expertise.id == my_need.id:
-                    match_score += 2
-                    their_offerings_my_needs.append({
-                        "type": "L2",
-                        "expertise": their_expertise.serialize()
-                    })
-                # L1 category match
-                elif their_expertise.category_id == my_need.category_id:
-                    match_score += 1
-                    their_offerings_my_needs.append({
-                        "type": "L1",
-                        "expertise": their_expertise.serialize()
-                    })
-        
-        # If there's at least one match in both directions
+        my_offerings_their_needs, my_score = find_matches(mentor.expertises, other_mentor.needed_expertises, "offer")
+        their_offerings_my_needs, their_score = find_matches(other_mentor.expertises, mentor.needed_expertises, "receive")
+
+        # Only add matches where both directions have at least one match
         if my_offerings_their_needs and their_offerings_my_needs:
             golden_matches.append({
                 "mentor": other_mentor.serialize(),
-                "match_score": match_score,
+                "match_score": my_score + their_score,
                 "i_can_offer": my_offerings_their_needs,
                 "they_can_offer": their_offerings_my_needs
             })
     
-    # Sort by match score descending
-    golden_matches.sort(key=lambda x: x["match_score"], reverse=True)
+    golden_matches = get_sorted_matches(golden_matches)
     
     return jsonify({
         "matches": golden_matches
@@ -371,35 +530,15 @@ def get_golden_matches(user_id):
 @mentor_bp.route('/matches/can-help/<int:user_id>', methods=['GET'])
 @login_required
 def get_mentors_i_can_help(user_id):
-    """
-    Find mentors that the current mentor can help based on their expertise
-    """
-    mentor = Mentor.query.filter_by(user_id=user_id).first()
-    if not mentor:
-        return jsonify({"error": "Mentor profile not found"}), 404
+    mentor, error_response, status_code = get_mentor_or_404(user_id)
+    if error_response:
+        return error_response, status_code
     
-    # Get all mentors except the current one
-    all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+    all_other_mentors = get_all_other_mentors(user_id)
     potential_matches = []
-    
+
     for other_mentor in all_other_mentors:
-        matches = []
-        
-        # Check what I can offer them
-        for my_expertise in mentor.expertises:
-            for their_need in other_mentor.needed_expertises:
-                # Direct L2 match
-                if my_expertise.id == their_need.id:
-                    matches.append({
-                        "type": "L2",
-                        "expertise": my_expertise.serialize()
-                    })
-                # L1 category match
-                elif my_expertise.category_id == their_need.category_id:
-                    matches.append({
-                        "type": "L1",
-                        "expertise": my_expertise.serialize()
-                    })
+        matches, _ = find_matches(mentor.expertises, other_mentor.needed_expertises, "offer")
         
         if matches:
             potential_matches.append({
@@ -411,39 +550,20 @@ def get_mentors_i_can_help(user_id):
         "matches": potential_matches
     })
 
+
 @mentor_bp.route('/matches/can-help-me/<int:user_id>', methods=['GET'])
 @login_required
 def get_mentors_who_can_help(user_id):
-    """
-    Find mentors that can help the current mentor based on their needs
-    """
-    mentor = Mentor.query.filter_by(user_id=user_id).first()
-    if not mentor:
-        return jsonify({"error": "Mentor profile not found"}), 404
+    mentor, error_response, status_code = get_mentor_or_404(user_id)
+    if error_response:
+        return error_response, status_code
     
-    # Get all mentors except the current one
-    all_other_mentors = Mentor.query.filter(Mentor.user_id != user_id).all()
+    all_other_mentors = get_all_other_mentors(user_id)
     potential_matches = []
-    
+
     for other_mentor in all_other_mentors:
-        matches = []
-        
-        # Check what they can offer me
-        for their_expertise in other_mentor.expertises:
-            for my_need in mentor.needed_expertises:
-                # Direct L2 match
-                if their_expertise.id == my_need.id:
-                    matches.append({
-                        "type": "L2",
-                        "expertise": their_expertise.serialize()
-                    })
-                # L1 category match
-                elif their_expertise.category_id == my_need.category_id:
-                    matches.append({
-                        "type": "L1",
-                        "expertise": their_expertise.serialize()
-                    })
-        
+        matches, _ = find_matches(other_mentor.expertises, mentor.needed_expertises, "receive")
+
         if matches:
             potential_matches.append({
                 "mentor": other_mentor.serialize(),
