@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Analytics } from '@vercel/analytics/react';
 import {
   BrowserRouter as Router,
   Route,
@@ -143,6 +144,7 @@ const App = () => {
           South African Startup Space 🇿🇦 ©2024 Created by Tawongaishe Nhawu❤️
         </Footer>
       </Layout>
+      <Analytics />
     </Router>
   );
 };
