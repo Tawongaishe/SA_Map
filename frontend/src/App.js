@@ -17,6 +17,7 @@ import Navigation from "./components/Navigation";
 import StartupDirectory from "./pages/StartupDirectory";
 import MentorOnboarding from "./components/MentorOnboarding";
 import MentorOnboardingController from "./components/MentorOnboardingController";
+import FeedbackForm from "./components/FeedbackForm";
 import "./App.css";
 
 const { Content, Footer } = Layout;
@@ -126,6 +127,9 @@ const App = () => {
             />
           </Routes>
         </Content>
+        {/* Feedback form button */}
+        <FeedbackForm />
+        {/* Footer */}
         <Footer
           style={{
             textAlign: "center",
