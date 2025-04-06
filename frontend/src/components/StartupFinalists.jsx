@@ -109,8 +109,7 @@ const StartupFinalists = () => {
       },
       {
         name: "Limu Lab",
-        description: "Innovative biotech company researching algae-based solutions for sustainable food production and biofuels.",
-        industry: "Biotech",
+        description: "Limu is an exciting app for children which provides for the learning of indigenous languages through storytelling, animation, music, and games.",
         founded: "2018",
         location: "Stellenbosch",
         highlight: "3 patents pending for algae technologies",
