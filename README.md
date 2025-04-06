@@ -2,7 +2,7 @@
 
 A platform bridging the gap in the South African startup ecosystem by connecting entrepreneurs with resources, mentors, and communities in one centralized hub.
 
-[Live Demo](https://sa-map-tau.vercel.app/) | [Video Demo](https://youtu.be/Eg7ICN77pvs)
+[Live Site](https://sa-map-tau.vercel.app/) | [Video Demo]([https://youtu.be/Eg7ICN77pvs](https://www.loom.com/share/4d411840211d42eaba6903caa0a8b36d?sid=53c04b52-8d47-4238-854d-0fe890ef5144))
 
 > Note: The backend is hosted on Render which has a cold start, so initial loading may take 1-2 minutes.
 
