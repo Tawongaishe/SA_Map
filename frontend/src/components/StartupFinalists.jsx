@@ -110,9 +110,9 @@ const StartupFinalists = () => {
       {
         name: "Limu Lab",
         description: "Limu is an exciting app for children which provides for the learning of indigenous languages through storytelling, animation, music, and games.",
-        founded: "2018",
-        location: "Stellenbosch",
-        highlight: "3 patents pending for algae technologies",
+        founded: "2020",
+        location: "South Africa",
+        highlight: "Partner of MultiChoice Africa",
         linkedin: "https://www.linkedin.com/company/limu-lab/",
         website: "https://limulab.co.za"
       },
