@@ -32,9 +32,7 @@ South African Startup Space addresses a fundamental challenge in South Africa's 
 
 ## Platform Stats
 - 500+ Startups Listed
-- 50+ Active Mentors
 - 20+ Communities
-- 100+ Resources
 
 Technical Details
 Architecture
